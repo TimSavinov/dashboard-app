@@ -15,35 +15,35 @@
            <div>
                <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-5">
 
-                  <monitor  :title="`total users`"
+                  <TotalsCard  :title="`total users`"
                             :icon_1="usersIcon"
                             :icon_1_viewbox="usersIconViewbox"
-                            :amount="$page.props.monitors.users.users_count"
-                            :progress="$page.props.monitors.users.last_signups"
-                            :progress-title="`Registered this week`"></monitor>
+                            :amount="$page.props.totals.users.count"
+                            :progress="$page.props.totals.users.last"
+                            :progress-title="`Registered this week`"></TotalsCard>
 
-                   <monitor :title="`courses`"
+                   <TotalsCard :title="`courses`"
                             :icon_1="coursesIcon"
                             :icon_1_viewbox="coursesIconViewbox"
-                            :amount="$page.props.monitors.users.users_count"
-                            :progress="$page.props.monitors.users.last_signups"
+                            :amount="$page.props.totals.courses.count"
+                            :progress="$page.props.totals.courses.last"
                             :showArrow="false"
                             :standardProgressColor="false"
-                            :progress-title="`Created this week`"></monitor>
+                            :progress-title="`Created this week`"></TotalsCard>
 
-                   <monitor :title="`students`"
+                   <TotalsCard :title="`students`"
                             :icon_1="studentsIcon"
                             :icon_1_viewbox="studentsIconViewbox"
-                            :amount="$page.props.monitors.users.users_count"
-                            :progress="$page.props.monitors.users.last_signups"
-                            :progress-title="`Enrolled this week`"></monitor>
+                            :amount="$page.props.totals.students.count"
+                            :progress="$page.props.totals.students.last"
+                            :progress-title="`Enrolled this week`"></TotalsCard>
 
-                   <monitor :title="`instructor`"
+                   <TotalsCard :title="`instructor`"
                             :icon_1="instructorIcon"
                             :icon_1_viewbox="instructorIconViewbox"
-                            :amount="$page.props.monitors.users.users_count"
-                            :progress="$page.props.monitors.users.last_signups"
-                            :progress-title="`Registered this week`"></monitor>
+                            :amount="$page.props.totals.teachers.count"
+                            :progress="$page.props.totals.teachers.last"
+                            :progress-title="`Registered this week`"></TotalsCard>
 
 
                </div>
@@ -56,7 +56,7 @@
 
 <script>
     import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-    import Monitor from '@/Components/DashboardElements/Monitor'
+    import TotalsCard from '@/Components/DashboardElements/TotalsCard'
     import BreezeButton from '@/Components/Button'
     import {Chart} from 'highcharts-vue'
 
@@ -66,7 +66,7 @@
             BreezeAuthenticatedLayout,
             highcharts: Chart,
             BreezeButton,
-            Monitor
+            TotalsCard
         },
 
         data() {
