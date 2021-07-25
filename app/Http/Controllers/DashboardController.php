@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Completion;
 use App\Models\Course;
-use App\Models\Role;
+use App\Models\Enrollment;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -63,7 +61,12 @@ class DashboardController extends Controller
                 'count' => $this->user->getUsersCountByRole('teacher'),
                 'last' => $this->user->getLastByRole('teacher'),
             ]
-        ]];
+        ],
+            "chart_1" => [
+                "enrollments" => Enrollment::getTimeEnrolled(),
+                "completions" => Completion::getTimeCompleted(),
+            ]
+        ];
 
         return $props;
     }

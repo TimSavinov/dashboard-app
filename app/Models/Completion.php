@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
-class Enrollment extends Model
+class Completion extends Model
 {
 
     /**
@@ -13,7 +14,7 @@ class Enrollment extends Model
      *
      * @var string
      */
-    protected $table = 'mdl_user_enrolments';
+    protected $table = 'mdl_course_completions';
 
     /**
      * @var string[]
@@ -27,10 +28,10 @@ class Enrollment extends Model
      *
      * default = 2019 year by GMT timezone (more records in the DB for that date)
      */
-    static public function getTimeEnrolled($tart = 1546300800, $end = 1577836800)
+    static public function getTimeCompleted($tart = 1546300800, $end = 1577836800)
     {
 
-        $count = Enrollment::whereBetween('timecreated', [$tart, $end])->get('timecreated')->sortBy(function ($item) {
+        $count = Completion::whereBetween('timecompleted', [$tart, $end])->get('timecompleted')->sortBy(function ($item) {
             return -Carbon::createFromTimestamp($item)->month;
         })->groupBy(function ($item) {
             return Carbon::createFromTimestamp($item)->format("F");
@@ -38,6 +39,8 @@ class Enrollment extends Model
 
         return array_reverse($count->toArray());
     }
+
+
 
 
 }

@@ -47,8 +47,9 @@
 
 
                </div>
+               <highcharts :options="firstChartOptions"></highcharts>
+
                {{ $page.props }}
-               <highcharts :options="chartOptions"></highcharts>
            </div>
         </template>
     </breeze-authenticated-layout>
@@ -117,32 +118,83 @@
                 158-275.6,320.6-275.6c83.9,0,160.4,31.9,217.9,84.1C638.3,694.8,638.3,694.8,638.3,694.8z M420.3,
                 499.1c-104.9,0-189.9-85-189.9-189.9c0-104.9,85-189.9,189.9-189.9s189.9,85,189.9,189.9C610.1,414.1,
                 525.1,499.1,420.3,499.1z`,
-                chartOptions: {
+                standardYear: {January: 0, February: 0, March: 0, April: 0, May: 0, June: 0, July: 0,
+                    August: 0, September: 0, October: 0, November: 0, December: 0},
+                firstChartOptions: {
                     chart: {
-                        type: 'bar'
-                    },
-                    title: {
-                        text: 'Fruit Consumption'
-                    },
-                    xAxis: {
-                        categories: ['Apples', 'Bananas', 'Oranges']
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Fruit eaten'
+                        type: 'spline',
+                        scrollablePlotArea: {
+                            minWidth: 600,
+                            scrollPositionX: 1
+                        },
+                        events: {
+                            load() {
+                                this.series[0].points[5].select() // comment this line if you want to uncomment below point definition
+                            }
                         }
                     },
+                    title: {
+                        text: 'Enrollments vs Completions',
+                        align: 'left',
+                    },
+
+                    yAxis: {
+                        title: {
+                            text: undefined
+                        }
+                    },
+
+                    xAxis: {
+                        // type: 'datetime',
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+                        plotLines: [{
+                            color: 'gray',
+                            width: 1,
+                            dashStyle: 'shortDash',
+                            value: new Date().getMonth(),
+                            label: {
+                                text: 'Current month'
+                            }
+                        }],
+
+                },
                     series: [{
-                        name: 'Jane',
-                        data: [1, 0, 4]
+                        name: 'Enrollments',
+                        color: 'purple'
                     }, {
-                        name: 'John',
-                        data: [5, 7, 3]
-                    }]
+                        name: 'Completions',
+                        color: 'blue'
+                    }],
+                    legend: {
+                        enabled: false
+                    },
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                        }]
+                    }
+
                 }
             }
         },
+        created(){
+            this.getEnrollments();
+            this.getCompletions();
+        },
         methods:{
+            getEnrollments(){
+                let exY = JSON.parse(JSON.stringify(this.standardYear));
+                let yearEn = Object.assign(exY, this.$page.props.chart_1.enrollments);
+                this.firstChartOptions.series[0].data =  Object.values(yearEn);
+            },
+
+            getCompletions(){
+                let exYt = JSON.parse(JSON.stringify(this.standardYear));
+                let yearCom = Object.assign(exYt, this.$page.props.chart_1.completions);
+                this.firstChartOptions.series[1].data =  Object.values(yearCom);
+            },
 
         }
     }
