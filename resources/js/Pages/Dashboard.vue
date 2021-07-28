@@ -135,6 +135,260 @@
                    </div>
                    <hr class="boder-b-0 my-4"/>
 <!--                   item end-->
+                   
+                   <div class="flex items-center justify-between my-6">
+                       <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                           <div class="flex my-4 px-4">
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-900 font-semibold text-left">
+                                       Popular Instructor
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 w-full"/>
+                           <!--                           user-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex my-4 px-4 mb-20">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <!--                           end user -->
+                       </div>
+                       <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                           <div class="flex my-4 px-4">
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-900 font-semibold text-left">
+                                       Recent courses
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 w-full"/>
+                           <!--                           course-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-50">
+                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/100x100/?tech">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       Course name to show here
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       course author name
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end course -->
+                           <!--                           course-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-50">
+                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/50x50/?tech">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       Course name to show here
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       course author name
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end course -->
+                           <!--                           course-->
+                           <div class="flex my-4 px-4">
+                               <div class="w-50">
+                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/50x50/?tech">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       Course name to show here
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       course author name
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 my-4"/>
+                           <!--                           end course -->
+                           <!--                           course-->
+                           <div class="flex my-4 px-4 mb-16">
+                               <div class="w-50">
+                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/50x50/?tech">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       Course name to show here
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       course author name
+                                   </div>
+                               </div>
+                           </div>
+                           <!--                           end course -->
+
+                       </div>
+                       <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                           <div class="flex my-4 px-4">
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-900 font-semibold text-left">
+                                       Activity
+                                   </div>
+                               </div>
+                           </div>
+                           <hr class="boder-b-0 w-full"/>
+                           <!--                           user-->
+                           <div class="flex mt-4 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="text-gray-600 font-thin ml-20 mt-4 absolute">
+                               time X hours ago
+                           </div>
+                           <!--connector line, maybe re-style for FOREACH loop-->
+                           <div class="border-l-2 border-gray-200 h-16 absolute ml-10 pb-2 pt-5"></div>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex mt-16 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="text-gray-600 font-thin ml-20 mt-4 absolute">
+                               time X hours ago
+                           </div>
+
+                           <div class="border-l-2 border-gray-200 h-16 absolute ml-10 pb-2 pt-5"></div>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex mt-16 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="text-gray-600 font-thin ml-20 mt-4 absolute">
+                               time X hours ago
+                           </div>
+
+                           <div class="border-l-2 border-gray-200 h-16 absolute ml-10 pb-2 pt-5"></div>
+                           <!--                           end user -->
+                           <!--                           user-->
+                           <div class="flex mt-16 mb-16 px-4">
+                               <div class="w-16">
+                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
+                               </div>
+                               <div class="flex-1 pl-2">
+                                   <div class="text-gray-700 font-semibold">
+                                       name
+                                   </div>
+                                   <div class="text-gray-600 font-thin">
+                                       email
+                                   </div>
+                               </div>
+                               <div class="text-gray-600 font-thin ml-16 mt-20 absolute">
+                                   time X hours ago
+                               </div>
+                           </div>
+                           <!--                           end user -->
+                       </div>
+                   </div>
 
                </div>
 
