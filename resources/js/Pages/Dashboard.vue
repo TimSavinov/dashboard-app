@@ -49,6 +49,95 @@
                </div>
                <highcharts :options="firstChartOptions"></highcharts>
 
+               <div class="bg-white rounded-md mx-4">
+<!--                   top-->
+                   <div class="bg-blue-50">
+                   <div class="flex items-center justify-between my-4 px-4">
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-bold uppercase">
+                               name
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-bold uppercase" @click="sortByEnrol">
+                              enrollment
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-bold uppercase">
+                               course
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-bold uppercase">
+                               status
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-bold uppercase">
+                               course progress
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-bold uppercase">
+                               role
+                           </div>
+                       </div>
+                           <div class="text-gray-600 font-bold uppercase">
+                               Edit
+                           </div>
+                   </div>
+                   <hr class="boder-b-0 my-4"/>
+                   </div>
+<!--                   top end-->
+
+<!--                   item-->
+                   <div class="flex items-center justify-between my-4 px-4" v-for="user in $page.props.users.init">
+                       <div class="w-16">
+                           <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?water">
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-700 font-semibold">
+                               {{ user.name }}
+                           </div>
+                           <div class="text-gray-600 font-thin">
+                               {{ user.email }}
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-700 font-semibold">
+                               {{ user.enroll_type || 'Undefined'}}
+                           </div>
+                           <div class="text-gray-600 font-thin">
+                               {{ tsToDate(user.enroll_time) }}
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-thin">
+                               {{ user.country || 'Undefined'  }}
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-thin">
+                               status TO CHANGE
+                           </div>
+                       </div>
+                       <div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-thin">
+                               progress TO ADD
+                           </div>
+                       </div><div class="flex-1 pl-2">
+                           <div class="text-gray-600 font-thin">
+                               {{ user.role || 'Undefined' }}
+                           </div>
+                       </div>
+                       <div class="text-red-400">Edit</div>
+                   </div>
+                   <hr class="boder-b-0 my-4"/>
+<!--                   item end-->
+
+               </div>
+
                {{ $page.props }}
            </div>
         </template>
@@ -194,6 +283,22 @@
                 let exYt = JSON.parse(JSON.stringify(this.standardYear));
                 let yearCom = Object.assign(exYt, this.$page.props.chart_1.completions);
                 this.firstChartOptions.series[1].data =  Object.values(yearCom);
+            },
+
+            tsToDate(ts) {
+                let res = '';
+                if (!ts) res = 'Undefined';
+                else {
+                    let dateObj = new Date(ts * 1000);
+
+                    let dd = dateObj.getDate();
+                    let mm = dateObj.getMonth() + 1;
+                    let yy = dateObj.getFullYear();
+
+                    res = (dd < 10 ? dd = '0' + dd : dd) + '.'
+                        + (mm < 10 ? mm = '0' + mm : mm) + '.' + yy
+                }
+                return res;
             },
 
         }

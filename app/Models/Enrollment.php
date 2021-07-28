@@ -19,8 +19,15 @@ class Enrollment extends Model
      * @var string[]
      */
     protected $guarded = [
-        'id'
+        'id', "timemodified"
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users(){
+        return $this->belongsToMany(User::class)->select('enrolid');
+    }
 
     /**
      * @return mixed

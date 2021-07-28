@@ -63,9 +63,15 @@ class DashboardController extends Controller
             ]
         ],
             "chart_1" => [
-                "enrollments" => Enrollment::getTimeEnrolled(),
-                "completions" => Completion::getTimeCompleted(),
-            ]
+//                "enrollments" => Enrollment::getTimeEnrolled(),
+                "enrollments" => '',
+//                "completions" => Completion::getTimeCompleted(),
+                "completions" => '',
+            ],
+
+            "users" => [
+                'init' => $this->user->getUsersForDashboard()
+            ],
         ];
 
         return $props;
