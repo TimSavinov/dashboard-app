@@ -49,10 +49,42 @@
                </div>
                <highcharts :options="firstChartOptions"></highcharts>
 
-               <div class="bg-white rounded-md mx-4">
-<!--                   top-->
+               <div class="bg-white mx-4">
+                   <div class="border-2 rounded-md">
+                   <div class="pt-2 relative mx-auto text-gray-600">
+                       <button type="submit" class="absolute top-0 mt-5 ml-4">
+                           <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;"
+                                xml:space="preserve"
+                                width="512px" height="512px">
+                        <path
+                            d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"/>
+                         </svg>
+                       </button>
+
+                       <!--                       export-->
+                       <button type="button" class="hover:border-blue-600 hover:shadow-md flex absolute top-0 right-0 mt-5 mr-32 border-2 rounded-md border-gray-200 w-20 px-2">
+                           <span class="pr-2 text-gray-600 text-sm">Export</span>
+                           <svg  class="text-gray-600 text-sm" height="24px" width="24px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m409.785156 278.5-153.785156 153.785156-153.785156-153.785156 28.285156-28.285156 105.5 105.5v-355.714844h40v355.714844l105.5-105.5zm102.214844 193.5h-512v40h512zm0 0"/></svg>
+                       </button>
+
+
+                       <!--                       filter -->
+                       <button type="button" class="hover:border-blue-600 hover:shadow-md flex absolute top-0 right-0 mt-5 mr-4 border-2 rounded-md border-gray-200 w-20 px-2">
+                           <span class="pr-2 text-gray-600 text-sm">Filter</span>
+                           <svg class="text-gray-600 text-sm" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="0" fill="none" width="24" height="24"/><g><path d="M10 19h4v-2h-4v2zm-4-6h12v-2H6v2zM3 5v2h18V5H3z"/></g></svg>
+                       </button>
+
+
+                       <input class="focus:outline-white focus:ring-transparent border-none bg-white h-10 w-1/3 pl-10 text-sm"
+                              type="search" name="search" placeholder="Search users">
+                       <hr class="boder-b-0 ml-4 my-1 w-1/3"/>
+                   </div>
+
+                   <!--                   top-->
                    <div class="bg-blue-50">
-                   <div class="flex items-center justify-between my-4 px-4">
+                   <div class="flex items-center justify-between my-4 px-4 pt-4">
                        <div class="flex-1 pl-2">
                            <div class="text-gray-600 font-bold uppercase">
                                name
@@ -133,9 +165,8 @@
                        </div>
                        <div class="text-red-400">Edit</div>
                    </div>
-                   <hr class="boder-b-0 my-4"/>
 <!--                   item end-->
-                   
+                   </div>
                    <div class="flex items-center justify-between my-6">
                        <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">

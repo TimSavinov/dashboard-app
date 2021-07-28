@@ -62,6 +62,8 @@ class DashboardController extends Controller
                 'last' => $this->user->getLastByRole('teacher'),
             ]
         ],
+
+            // TODO: ALL CHARTS TO AJAX CALL
             "chart_1" => [
 //                "enrollments" => Enrollment::getTimeEnrolled(),
                 "enrollments" => '',
@@ -70,6 +72,7 @@ class DashboardController extends Controller
             ],
 
             "users" => [
+                // TODO: ADD MISSING INFO AND LASTNAME
                 'init' => $this->user->getUsersForDashboard()
             ],
         ];
