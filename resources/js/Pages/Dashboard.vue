@@ -561,8 +561,7 @@
 
         created(){
             this.getFilterInfo();
-            this.setEnrollments();
-            this.setCompletions();
+            this.getEnrollmentsAndCompletions();
         },
 
         data() {
@@ -578,6 +577,7 @@
                 },
                 search: '',
                 filter: {},
+                firstChartInfo: {},
                 usersIconViewbox: `0 0 24 24`,
                 coursesIconViewbox: `0 0 412.72 412.72`,
                 studentsIconViewbox: `0 0 1000 1000`,
@@ -633,11 +633,6 @@
                             minWidth: 600,
                             scrollPositionX: 1
                         },
-                        events: {
-                            load() {
-                                this.series[0].points[5].select() // comment this line if you want to uncomment below point definition
-                            }
-                        }
                     },
                     title: {
                         text: 'Enrollments vs Completions',
@@ -666,10 +661,14 @@
                 },
                     series: [{
                         name: 'Enrollments',
-                        color: 'purple'
+                        color: 'purple',
+                        // adding dump data , just so it looks NICE
+                        data: [0, 3, 2, 10, 5, 3]
                     }, {
                         name: 'Completions',
-                        color: 'blue'
+                        color: 'blue',
+                        // same here --- adding dump data , just so it looks NICE
+                        data: [5, 1, 16, 1, 8, 3]
                     }],
                     legend: {
                         enabled: false
@@ -687,15 +686,15 @@
             }
         },
         methods:{
-            setEnrollments(){
+            setEnrollments(enrol){
                 let exY = JSON.parse(JSON.stringify(this.standardYear));
-                let yearEn = Object.assign(exY, this.$page.props.chart_1.enrollments);
+                let yearEn = Object.assign(exY, enrol);
                 this.firstChartOptions.series[0].data =  Object.values(yearEn);
             },
 
-            setCompletions(){
+            setCompletions(complet){
                 let exYt = JSON.parse(JSON.stringify(this.standardYear));
-                let yearCom = Object.assign(exYt, this.$page.props.chart_1.completions);
+                let yearCom = Object.assign(exYt, complet);
                 this.firstChartOptions.series[1].data =  Object.values(yearCom);
             },
 
@@ -723,16 +722,6 @@
                 this.filterResults.role.all = !this.filterResults.role.all; this.filterResults.role.students = !this.filterResults.role.students;
             },
 
-            // AJAX calls
-            getFilterInfo() {
-                axios
-                    .get('/dashboard/filter')
-                    .then((res) => {
-                        this.filter = res.data.filter_info;
-                        console.log('ress',  res)
-                    });
-            },
-
             applyFilters() {
                 this.toggleFilterModal();
                 console.log('filters', this.filterResults);
@@ -741,6 +730,25 @@
             searchUsersByName() {
                 console.log('search', this.search);
                 this.search = '';
+            },
+
+            // AJAX calls
+            getFilterInfo() {
+                axios
+                    .get('/dashboard/filter')
+                    .then((res) => {
+                        this.filter = res.data.filter_info;
+                    });
+            },
+
+            getEnrollmentsAndCompletions() {
+                axios
+                    .get('/dashboard/charts')
+                    .then((res) => {
+                        let firstChartInfo = res.data.chart_1;
+                        this.setEnrollments(firstChartInfo.enrollments);
+                        this.setCompletions(firstChartInfo.completions);
+                    });
             }
 
         }

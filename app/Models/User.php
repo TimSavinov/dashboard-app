@@ -121,8 +121,6 @@ class User extends Authenticatable
 
     public function getUsersForDashboard()
     {
-            // TODO: add atatus [after reply], progress (?)
-
         $users = User::take(6)->get(['id', 'firstname', 'lastname', 'email', 'country']);
 
         $users_to_export = $users->map(function ($user){

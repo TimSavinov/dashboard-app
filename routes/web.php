@@ -30,4 +30,7 @@ Route::get('/dashboard', [DashboardController::class, 'render'])
 Route::get('/dashboard/filter', [DashboardController::class, 'getInfoForFilter'])
     ->middleware(['auth', 'verified']);
 
+Route::get('/dashboard/charts', [DashboardController::class, 'getChartsInfo'])
+    ->middleware(['auth', 'verified']);
+
 require __DIR__.'/auth.php';

@@ -65,13 +65,7 @@ class DashboardController extends Controller
             ]
         ],
 
-            // TODO: ALL CHARTS TO AJAX CALL
-            "chart_1" => [
-//                "enrollments" => Enrollment::getTimeEnrolled(),
-                "enrollments" => '',
-//                "completions" => Completion::getTimeCompleted(),
-                "completions" => '',
-            ],
+            // MIGRATED ALL CHARTS TO AN AJAX CALL
 
             "users" => [
                 // TODO: ADD MISSING INFO AND LASTNAME
@@ -91,6 +85,16 @@ class DashboardController extends Controller
             'filter_info' => [
                 'courses' => Course::allCurses(),
                 'enrolls' => Enroll::allEnrollNames(),
+            ],
+        ]);
+    }
+
+    public function getChartsInfo()
+    {
+        return response()->json([
+            'chart_1' => [
+                "enrollments" => Enrollment::getTimeEnrolled(),
+                "completions" => Completion::getTimeCompleted(),
             ],
         ]);
     }
