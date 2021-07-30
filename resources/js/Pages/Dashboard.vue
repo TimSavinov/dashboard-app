@@ -52,7 +52,7 @@
                <div class="bg-white mx-4">
                    <div class="border-2 rounded-md">
                    <div class="pt-2 relative mx-auto text-gray-600">
-                       <button type="submit" class="absolute top-0 mt-5 ml-4">
+                       <button type="submit" class="absolute top-0 mt-5 ml-4" @click="searchUsersByName">
                            <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
                                 viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;"
@@ -71,20 +71,22 @@
 
 
                        <!--                       filter -->
-                       <button type="button" class="hover:border-blue-600 hover:shadow-md flex absolute top-0 right-0 mt-5 mr-4 border-2 rounded-md border-gray-200 w-20 px-2">
+                       <button type="button" class="hover:border-blue-600 hover:shadow-md flex absolute top-0 right-0
+                       mt-5 mr-4 border-2 rounded-md border-gray-200 w-20 px-2"
+                       @click="toggleFilterModal">
                            <span class="pr-2 text-gray-600 text-sm">Filter</span>
                            <svg class="text-gray-600 text-sm" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="0" fill="none" width="24" height="24"/><g><path d="M10 19h4v-2h-4v2zm-4-6h12v-2H6v2zM3 5v2h18V5H3z"/></g></svg>
                        </button>
 
 
                        <input class="focus:outline-white focus:ring-transparent border-none bg-white h-10 w-1/3 pl-10 text-sm"
-                              type="search" name="search" placeholder="Search users">
+                              type="search" name="search" placeholder="Search users" v-model="search" @keyup.enter="searchUsersByName">
                        <hr class="boder-b-0 ml-4 my-1 w-1/3"/>
                    </div>
 
                    <!--                   top-->
                    <div class="bg-blue-50">
-                   <div class="flex items-center justify-between my-4 px-4 pt-4">
+                   <div class="flex items-center justify-between my-4 px-4 pt-4 text-center">
                        <div class="flex-1 pl-2">
                            <div class="text-gray-600 font-bold uppercase">
                                name
@@ -146,20 +148,41 @@
                        </div>
                        <div class="flex-1 pl-2">
                            <div class="text-gray-600 font-thin">
-                               {{ user.country || 'Undefined'  }}
+                               {{ user.course || 'Undefined'  }}
                            </div>
                        </div>
                        <div class="flex-1 pl-2">
                            <div class="text-gray-600 font-thin">
-                               status TO CHANGE
+                               <div class="flex" v-if="user.status === 1">
+                                   <div
+                                       class="h-4 w-4 mr-2 mt-1 z-2 border-2 border-white rounded-full bg-green-400"></div>
+                                   Active
+                               </div>
+                                   <div class="flex" v-if="user.status === 0">
+                                       <div
+                                           class="h-4 w-4 mr-2 mt-1 z-2 border-2 border-white rounded-full bg-yellow-400"></div>
+                                       Suspended
+                                   </div>
+                                       <div class="flex" v-if="user.status === null">
+                                           <div
+                                               class="h-4 w-4 mr-2 mt-1 z-2 border-2 border-white rounded-full bg-gray-400 "></div>
+                                           Undefined
+                                       </div>
                            </div>
                        </div>
-                       <div class="flex-1 pl-2">
+                       <div class="flex-1 pl-2 relative">
                            <div class="text-gray-600 font-thin">
-                               progress TO ADD
+                               <div class="relative pt-1 px-2 flex items-center">
+                                   <span>{{ user.progress ? user.progress : 0 }}%</span>
+                                   <div class="overflow-hidden h-1 w-3/4 b-4 ml-4 text-xs flex rounded bg-green-200">
+                                       <div :style="{width: user.progress ? user.progress + '%' : '1%'}"
+                                            class="shadow-none flex flex-col text-center whitespace-nowrap
+                                            text-white justify-center bg-green-500"></div>
+                                   </div>
+                               </div>
                            </div>
                        </div><div class="flex-1 pl-2">
-                           <div class="text-gray-600 font-thin">
+                           <div class="text-gray-600 font-thin text-center">
                                {{ user.role || 'Undefined' }}
                            </div>
                        </div>
@@ -424,6 +447,97 @@
                </div>
 
                {{ $page.props }}
+
+<!--               modal-->
+               <div>
+                   <div v-if="showModal" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+                       <div class="relative my-6 mx-auto w-full">
+                           <!--content-->
+                           <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-1/4 bg-white outline-none focus:outline-none float-right mr-4">
+                               <!--header-->
+                               <div
+                                   class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                   <h3 class="text-lg font-semibold">
+                                       Filter Users
+                                   </h3>
+                                   <button class="p-1 ml-auto bg-transparent border-0 text-gray-600
+                                   float-right text-lg font-semibold outline-none focus:outline-none"
+                                           @click="toggleFilterModal">
+                                    <span class="bg-transparent text-black h-6 w-6 text-lg block outline-none focus:outline-none"> X
+                                        </span>
+                                   </button>
+                               </div>
+                               <!--body-->
+                               <div class="relative p-6 flex-col space-y-6">
+
+                                   <div class="text-gray-600">
+                                       <div class="relative w-full ">
+                                           <span class="text-gray-600 text-xs uppercase font-bold">Role</span>
+                                           <div class="flex items-center">
+                                               <label class="text-gray-700">
+                                                   <input class="form-checkbox text-blue-600"
+                                                          type="checkbox"
+                                                          v-model="filterResults.role.all"
+                                                          @click="filterCheck"/>
+                                                   <span class="ml-1">All</span>
+                                               </label>
+                                               <label class="text-gray-700 ml-20">
+                                                   <input class="form-checkbox text-blue-600"
+                                                          type="checkbox"
+                                                          v-model="filterResults.role.students"
+                                                          @click="filterCheck"/>
+                                                   <span class="ml-1">Student</span>
+                                               </label>
+                                           </div>
+                                       </div>
+                                   </div>
+
+                                   <div class="flex items-center justify-between">
+                                       <label class="w-1/2">
+                                           <span class="text-gray-600 text-xs uppercase font-bold">Enrollment method</span>
+                                           <select class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border
+                                       rounded-lg appearance-none focus:shadow-outline" v-model="filterResults.enroll">
+                                           <option>Any</option>
+                                           <option v-for="enroll in filter.enrolls">{{ enroll.enrol }}</option>
+                                       </select>
+                                       </label>
+                                       <label class="w-1/2 mx-2">
+                                           <span class="text-gray-600 text-xs uppercase font-bold">Status</span>
+                                           <select class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border
+                                       rounded-lg appearance-none focus:shadow-outline" v-model="filterResults.status">
+                                               <option>Any status</option>
+                                               <option>Active</option>
+                                               <option>Suspended</option>
+                                           </select>
+                                       </label>
+                                   </div>
+
+                                   <div>
+                                   <label class="mx-2 my-4">
+                                       <span class="text-gray-600 text-xs uppercase font-bold">Course</span>
+                                       <select class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border
+                                       rounded-lg appearance-none focus:shadow-outline" v-model="filterResults.course">
+                                           <option>Any course</option>
+                                           <option v-for="course in filter.courses">{{ course.shortname }}</option>
+
+                                       </select>
+                                   </label>
+                                   </div>
+
+                               </div>
+                               <!--footer-->
+                               <div class="flex justify-center p-4">
+                                   <button class="rounded-md text-white bg-blue-700 font-bold py-2 text-sm outline-none
+                                   focus:outline-none w-4/5" type="button" @click="applyFilters">
+                                       Apply
+                                   </button>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div v-if="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
+               </div>
+
            </div>
         </template>
     </breeze-authenticated-layout>
@@ -444,8 +558,26 @@
             TotalsCard
         },
 
+
+        created(){
+            this.getFilterInfo();
+            this.setEnrollments();
+            this.setCompletions();
+        },
+
         data() {
             return {
+                filterResults: {
+                    role: {
+                        all: true,
+                        students: false
+                    },
+                    enroll: "Any",
+                    status: "Any status",
+                    course: "Any course"
+                },
+                search: '',
+                filter: {},
                 usersIconViewbox: `0 0 24 24`,
                 coursesIconViewbox: `0 0 412.72 412.72`,
                 studentsIconViewbox: `0 0 1000 1000`,
@@ -550,21 +682,18 @@
                         }]
                     }
 
-                }
+                },
+                showModal: false
             }
         },
-        created(){
-            this.getEnrollments();
-            this.getCompletions();
-        },
         methods:{
-            getEnrollments(){
+            setEnrollments(){
                 let exY = JSON.parse(JSON.stringify(this.standardYear));
                 let yearEn = Object.assign(exY, this.$page.props.chart_1.enrollments);
                 this.firstChartOptions.series[0].data =  Object.values(yearEn);
             },
 
-            getCompletions(){
+            setCompletions(){
                 let exYt = JSON.parse(JSON.stringify(this.standardYear));
                 let yearCom = Object.assign(exYt, this.$page.props.chart_1.completions);
                 this.firstChartOptions.series[1].data =  Object.values(yearCom);
@@ -585,6 +714,34 @@
                 }
                 return res;
             },
+
+            toggleFilterModal() {
+                this.showModal = !this.showModal;
+            },
+
+            filterCheck() {
+                this.filterResults.role.all = !this.filterResults.role.all; this.filterResults.role.students = !this.filterResults.role.students;
+            },
+
+            // AJAX calls
+            getFilterInfo() {
+                axios
+                    .get('/dashboard/filter')
+                    .then((res) => {
+                        this.filter = res.data.filter_info;
+                        console.log('ress',  res)
+                    });
+            },
+
+            applyFilters() {
+                this.toggleFilterModal();
+                console.log('filters', this.filterResults);
+            },
+
+            searchUsersByName() {
+                console.log('search', this.search);
+                this.search = '';
+            }
 
         }
     }

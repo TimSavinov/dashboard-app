@@ -38,4 +38,11 @@ class Course extends Model
     {
         return Course::whereBetween('timecreated', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
     }
+
+    /**
+     * @return mixed
+     */
+    public function scopeAllCurses(){
+        return Course::distinct()->get('id', 'shortname', 'status');
+    }
 }

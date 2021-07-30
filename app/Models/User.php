@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -66,6 +67,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'mdl_course_completions', 'userid', 'course');
+    }
+
+    /**
      * @return mixed
      */
     public function getUsersCount()
@@ -119,15 +128,19 @@ class User extends Authenticatable
         $users_to_export = $users->map(function ($user){
             $enrol = $user->enrolls->first();
             $role = $user->roles->first();
+            $course = $user->courses->first();
             return [
-                    'name' => $user->firstname,
+                    'name' => $user->firstname . ' ' . $user->lastname,
                     'email' => $user->email,
-
-                //TODO: get course instead of country
-                    'country' => $user->country,
+                    'course' => $course ? $course->shortname : null,
                     'enroll_type' => $enrol ? $enrol->enrol : null,
                     'enroll_time' => $enrol ? $enrol->timecreated : null,
-                    'role' => $role ? $role->shortname : null
+                    'status' => $course != null  ? $course->status : null,
+                    'role' => $role ? $role->shortname : null,
+                    'progress' => $course ? DB::table('mdl_grade_grades_history')
+                        ->where('userid', '=', $user->id)
+                        ->where('itemid', '=', $course->id)
+                        ->first() : null
             ];
         });
 

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Completion;
 use App\Models\Course;
+use App\Models\Enroll;
 use App\Models\Enrollment;
 use App\Models\User;
+use http\Client\Response;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -78,6 +80,19 @@ class DashboardController extends Controller
         ];
 
         return $props;
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getInfoForFilter()
+    {
+        return response()->json([
+            'filter_info' => [
+                'courses' => Course::allCurses(),
+                'enrolls' => Enroll::allEnrollNames(),
+            ],
+        ]);
     }
 }
 

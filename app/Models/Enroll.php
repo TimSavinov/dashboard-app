@@ -29,4 +29,11 @@ class Enroll extends Model
         return $this->belongsToMany(User::class, 'mdl_user_enrolments', 'enrolid', 'userid');
     }
 
+    /**
+     * @return mixed
+     */
+    public function scopeAllEnrollNames(){
+        return Enroll::distinct()->get('enrol');
+    }
+
 }
