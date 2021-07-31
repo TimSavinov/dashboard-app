@@ -43,6 +43,6 @@ class Course extends Model
      * @return mixed
      */
     public function scopeAllCurses(){
-        return Course::distinct()->get('id', 'shortname', 'status');
+        return Course::distinct()->get(['id', 'shortname']);
     }
 }

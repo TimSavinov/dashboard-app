@@ -94,9 +94,9 @@ class User extends Authenticatable
      * @param $role
      * @return mixed
      */
-    public function getUsersCountByRole($role)
+    public function getUsersByRole($role)
     {
-        return Role::where('shortname', $role)->first()->users()->count();
+        return Role::where('shortname', $role)->first()->users();
     }
 
     /**
@@ -122,9 +122,14 @@ class User extends Authenticatable
      * @return mixed
      *
      */
-    public function getUsersForDashboard()
+    public function getUsersForDashboard($filtered=null)
     {
-        $users = User::take(6)->get(['id', 'firstname', 'lastname', 'email', 'country']);
+        if(!$filtered) {
+            $users = User::take(6)->get(['id', 'firstname', 'lastname', 'email', 'country']);
+        }
+        else {
+            $users = $filtered;
+        }
 
         return $users->map(function ($user){
             $enrol = $user->enrolls->first();
@@ -146,6 +151,13 @@ class User extends Authenticatable
         });
     }
 
+    public function filterUsers ($filters)
+    {
+
+        dd($filters);
+
+    }
+
     /**
      * RETURN TEACHERS WITH COURSES AND USERS IN THEM, CONSIDER TEACHERS BEING OWNERS OF COURSES BY 'mdl_user_enrolments'
      * VIA 'mdl_context' USING 'instanceid' AS  COURSE IDENTIFIER AND DEPTH AS AMOUNT OF USERS IN THE COURSE (AS THEIR
@@ -157,7 +169,27 @@ class User extends Authenticatable
      */
     public function getPopularInstructors()
     {
-        $instructors = Role::where('shortname', 'teacher')->first()->users()->take(5)->get()->sortBy('lastaccess');
+
+        // TRYING TO GET ANYTHING TEACHER-RELATED BECAUSE THERE ARE VERY FEW INSTRUCTORS BUT LOOKS BETTER IF SHOWING MORE ON DASHBOARD
+        $teachers = Role::where('shortname', 'teacher')->first()->users()->take(5)->get();
+        $editTeachers = Role::where('shortname', 'editingteacher')->first()->users()->take(5)->get();
+
+
+        $t = $this->getInstructorsForRecents($teachers);
+        $et = $this->getInstructorsForRecents($editTeachers);
+
+        return collect(array_merge($t->toArray(), $et->toArray()))->sortBy('lastaccess')->take(5);
+
+
+    }
+
+    /**
+     * @param $instructors
+     * @return mixed
+     *
+     */
+    public function getInstructorsForRecents($instructors)
+    {
         return $instructors->map(function ($teacher) {
             $instructorName = $teacher->firstname . ' ' . $teacher->lastname;
             $courseList = $teacher->enrolls;
@@ -182,15 +214,29 @@ class User extends Authenticatable
      */
     public function getPopularCourses()
     {
-        $instructors = Role::where('shortname', 'teacher')->first()->users()->take(4)->get()->sortBy('timecreated');
-        return $instructors->map(function ($teacher) {
+
+        // SAME HERE ----  TRYING TO GET ANYTHING TEACHER-RELATED BECAUSE THERE ARE VERY FEW INSTRUCTORS BUT LOOKS BETTER IF SHOWING MORE ON DASHBOARD
+
+        $instructors = Role::where('shortname', 'coursecreator')->first()->users()->take(4)->get();
+        $editTeachers = Role::where('shortname', 'editingteacher')->first()->users()->take(4)->get();
+        $courseCreators = Role::where('shortname', 'coursecreator')->first()->users()->take(4)->get();
+
+        $t = $this->coursesForRecents($instructors);
+        $et = $this->coursesForRecents($editTeachers);
+        $cr = $this->coursesForRecents($courseCreators);
+
+         return collect(array_merge($t->toArray(), $et->toArray(), $cr->toArray()))->sortBy('timecreated')->take(5);
+    }
+
+    public function coursesForRecents($instr)
+    {
+        return $instr->map(function ($teacher) {
             $course = $teacher->enrolls->first()->courseid;
             return [
                 'name' =>  Course::where('id', $course)->first()->fullname,
                 'instructor' => $teacher->firstname . ' ' . $teacher->lastname,
-                ];
+            ];
         });
-
     }
 
     /**

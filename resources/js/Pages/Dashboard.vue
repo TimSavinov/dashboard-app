@@ -652,19 +652,31 @@
 
             applyFilters() {
                 this.toggleFilterModal();
+                this.filterUsers();
                 console.log('filters', this.filterResults);
             },
 
+
+
+            // AJAX calls
             searchUsersByName() {
-                console.log('search', this.search);
+                axios
+                    .post('/dashboard/search', {'query': this.search})
+                    .then((res) => {
+                        if(res.data.users.length > 0) {
+                            this.$page.props.users.init = res.data.users;
+                        } else { alert('Nothing found, please try another search query')}
+
+                        console.log('ress', res.data.users.length);
+                    });
                 this.search = '';
             },
 
-            // AJAX calls
             getFilterInfo() {
                 axios
                     .get('/dashboard/filter')
                     .then((res) => {
+                        console.log('asdasdasd', res.data.filter_info);
                         this.filter = res.data.filter_info;
                     });
             },
@@ -696,6 +708,14 @@
                         // Dynamicall click the a link element
                         // This will download the csv file
                         link.click();
+                    });
+            },
+
+            filterUsers() {
+                axios
+                .post('/dashboard/filter', this.filterResults)
+                    .then((res) => {
+                        console.log(res.data)
                     });
             },
 

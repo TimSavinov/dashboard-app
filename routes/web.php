@@ -30,6 +30,12 @@ Route::get('/dashboard', [DashboardController::class, 'render'])
 Route::get('/dashboard/filter', [DashboardController::class, 'getInfoForFilter'])
     ->middleware(['auth', 'verified']);
 
+Route::post('/dashboard/filter', [DashboardController::class, 'filterUsers'])
+    ->middleware(['auth', 'verified']);
+
+Route::post('/dashboard/search', [DashboardController::class, 'searchUsers'])
+    ->middleware(['auth', 'verified']);
+
 Route::get('/dashboard/charts', [DashboardController::class, 'getChartsInfo'])
     ->middleware(['auth', 'verified']);
 

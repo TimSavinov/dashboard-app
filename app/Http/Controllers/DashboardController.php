@@ -7,6 +7,8 @@ use App\Models\Course;
 use App\Models\Enroll;
 use App\Models\Enrollment;
 use App\Models\User;
+use http\Env\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Response;
 
@@ -56,11 +58,11 @@ class DashboardController extends Controller
                 'last' => $this->course->getLastCourses(),
             ],
             'students' => [
-                'count' => $this->user->getUsersCountByRole('student'),
+                'count' => $this->user->getUsersByRole('student')->count(),
                 'last' => $this->user->getLastEnrollments(),
              ],
             "teachers" => [
-                'count' => $this->user->getUsersCountByRole('teacher'),
+                'count' => $this->user->getUsersByRole('teacher')->count(),
                 'last' => $this->user->getLastByRole('teacher'),
             ]
         ],
@@ -138,6 +140,38 @@ class DashboardController extends Controller
 
             return Response::stream($callback, 200, $responseHeaders);
     }
+
+    public function filterUsers(\Illuminate\Http\Request $request)
+    {
+        $data = $request->validate([
+            "role" => "required|array|min:2",
+            "name.*" => "required|string",
+            "enroll" => "required|string|min:2",
+            "status" => "required|string|min:2",
+            "course" => "required|string|min:2",
+
+        ]);
+
+        return $this->user->filterUsers($data);
+    }
+
+    public function searchUsers(\Illuminate\Http\Request $request) {
+        $data = $request->validate([
+            "query" => "required|string|min:1"
+        ]);
+
+        $searchQuery = $data['query'];
+
+        $users = User::where(DB::raw('lower(`firstname`)'), 'LIKE', '%' . strtolower($searchQuery) . '%')
+            ->orWhere(DB::raw('lower(`lastname`)'), 'LIKE', '%' . strtolower($searchQuery) . '%')
+            ->take(6)
+            ->get();
+
+
+        return response()->json(["users" => $this->user->getUsersForDashboard($users)]);
+    }
+
+
 }
 
 
