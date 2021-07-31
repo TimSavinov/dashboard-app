@@ -7,8 +7,8 @@ use App\Models\Course;
 use App\Models\Enroll;
 use App\Models\Enrollment;
 use App\Models\User;
-use http\Client\Response;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Response;
 
 class DashboardController extends Controller
 {
@@ -71,6 +71,12 @@ class DashboardController extends Controller
                 // TODO: ADD MISSING INFO AND LASTNAME
                 'init' => $this->user->getUsersForDashboard()
             ],
+
+            'recents' => [
+                'instructors' => $this->user->getPopularInstructors(),
+                'courses' => $this->user->getPopularCourses(),
+                'activity' => $this->user->getActivities(),
+            ]
         ];
 
         return $props;
@@ -97,6 +103,40 @@ class DashboardController extends Controller
                 "completions" => Completion::getTimeCompleted(),
             ],
         ]);
+    }
+
+    public function exportUsers()
+    {
+            $users = User::all();
+
+            $responseHeaders = array(
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=lms_users.csv",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            );
+
+            $callback = function () use ($users) {
+                $header = [
+                    'id','auth','confirmed','policyagreed','deleted','suspended','mnethostid','username','idnumber','firstname',
+                    'lastname','email','emailstop','icq','skype','yahoo','aim','msn','phone1','phone2','institution','department','address','city',
+                    'country','lang','calendartype','theme','timezone','firstaccess','lastaccess','lastlogin','currentlogin','lastip',
+                    'secret','picture','url','description','descriptionformat','mailformat','maildigest','maildisplay','autosubscribe',
+                    'trackforums','timecreated','timemodified','trustbitmask','imagealt','lastnamephonetic','firstnamephonetic','middlename','alternatename'
+                ];
+
+                $file = fopen('php://output', 'w');
+
+                fputcsv($file, $header);
+                foreach ($users as $user) {
+                    fputcsv($file, $user->toArray());
+                }
+
+                fclose($file);
+            };
+
+            return Response::stream($callback, 200, $responseHeaders);
     }
 }
 

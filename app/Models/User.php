@@ -113,17 +113,20 @@ class User extends Authenticatable
     public function getLastByRole($r)
     {
         $users = Role::where('shortname', $r)->first()->users()->get();
-        $lastEnrollments = $users->filter(function($user){
+        return $users->filter(function($user){
             return $user['timestart'] >= Carbon::now()->startOfWeek() && $user['timestart'] <= Carbon::now()->endOfWeek();
         });
-        return $lastEnrollments;
     }
 
+    /**
+     * @return mixed
+     *
+     */
     public function getUsersForDashboard()
     {
         $users = User::take(6)->get(['id', 'firstname', 'lastname', 'email', 'country']);
 
-        $users_to_export = $users->map(function ($user){
+        return $users->map(function ($user){
             $enrol = $user->enrolls->first();
             $role = $user->roles->first();
             $course = $user->courses->first();
@@ -141,7 +144,96 @@ class User extends Authenticatable
                         ->first() : null
             ];
         });
+    }
 
-        return $users_to_export;
+    /**
+     * RETURN TEACHERS WITH COURSES AND USERS IN THEM, CONSIDER TEACHERS BEING OWNERS OF COURSES BY 'mdl_user_enrolments'
+     * VIA 'mdl_context' USING 'instanceid' AS  COURSE IDENTIFIER AND DEPTH AS AMOUNT OF USERS IN THE COURSE (AS THEIR
+     * IDS SEEM TO BE LISTED IN 'path')
+     *
+     * sorted by last access
+     *
+     * @return mixed
+     */
+    public function getPopularInstructors()
+    {
+        $instructors = Role::where('shortname', 'teacher')->first()->users()->take(5)->get()->sortBy('lastaccess');
+        return $instructors->map(function ($teacher) {
+            $instructorName = $teacher->firstname . ' ' . $teacher->lastname;
+            $courseList = $teacher->enrolls;
+            $coursesCount = $courseList->count();
+            $courseStudents = $courseList->map(function ($course) {
+                $courseId = $course->courseid;
+                $users = 0;
+                $users += DB::table('mdl_context')->where('instanceid', '=', $courseId)->sum('depth');
+                return ['users' => $users];
+            });
+
+            return ['name' => $instructorName, 'courses' => $coursesCount, 'students' => $courseStudents->sum('users')];
+        });
+    }
+
+    /**
+     *
+     * * following the task, 'Recent Courses (4 instructors sorted by timecreated date)'
+     *
+     * @return mixed
+     *
+     */
+    public function getPopularCourses()
+    {
+        $instructors = Role::where('shortname', 'teacher')->first()->users()->take(4)->get()->sortBy('timecreated');
+        return $instructors->map(function ($teacher) {
+            $course = $teacher->enrolls->first()->courseid;
+            return [
+                'name' =>  Course::where('id', $course)->first()->fullname,
+                'instructor' => $teacher->firstname . ' ' . $teacher->lastname,
+                ];
+        });
+
+    }
+
+    /**
+     * sorting all 3 tables mentioned in the task, taking 4 the latest results, returning 'em
+     *
+     * @return array
+     */
+    public function getActivities()
+    {
+        $enrollments = Enrollment::latest('timecreated')->take(4)->get()->sortBy('timecreated')->map(function ($item){
+            $user = User::where('id', $item->userid)->first();
+            $enrol = Enroll::where('id', $item->enrolid)->first();
+            return ['type' => 'enroll',
+                    'ts' => $item->timecreated,
+                    'user' => $user->firstname . ' ' . $user->lastname,
+                    'course' => Course::where('id', $enrol->courseid)->first()->fullname,
+            ];
+        });
+
+        $completions = Completion::latest('timecompleted')->take(4)->get()->sortBy('timecompleted')->map(function ($item){
+            $user = User::where('id', $item->userid)->first();
+            return ['type' => 'completion',
+                'ts' => $item->timecompleted,
+                'user' => $user->firstname . ' ' . $user->lastname,
+                'course' => Course::where('id', $item->course)->first()->fullname,
+            ];
+        });
+
+        $grades = Grades::latest('timecreated')->take(4)->get()->sortBy('timecreated')->map(function ($item){
+            $user = User::where('id', $item->userid)->first();
+            $grade = DB::table('mdl_grade_items')->where('id', $item->itemid)->first();
+
+            return ['type' => 'grade',
+                'ts' => $item->timecreated,
+                'user' => $user->firstname . ' ' . $user->lastname,
+                'course' => Course::where('id', $grade->courseid)->first()->fullname,
+                'score' => $item->finalgrade,
+            ];
+        });
+
+
+           $merged = array_merge($enrollments->toArray(), $completions->toArray(), $grades->toArray());
+
+        return collect($merged)->sortByDesc('ts')->take(4)->toArray();
     }
 }

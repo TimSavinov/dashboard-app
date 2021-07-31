@@ -64,9 +64,13 @@
                        </button>
 
                        <!--                       export-->
-                       <button type="button" class="hover:border-blue-600 hover:shadow-md flex absolute top-0 right-0 mt-5 mr-32 border-2 rounded-md border-gray-200 w-20 px-2">
+                       <button type="button" class="hover:border-blue-600 hover:shadow-md flex absolute top-0 right-0
+                       mt-5 mr-32 border-2 rounded-md border-gray-200 w-20 px-2"
+                       @click="exportAllUsers()">
                            <span class="pr-2 text-gray-600 text-sm">Export</span>
-                           <svg  class="text-gray-600 text-sm" height="24px" width="24px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m409.785156 278.5-153.785156 153.785156-153.785156-153.785156 28.285156-28.285156 105.5 105.5v-355.714844h40v355.714844l105.5-105.5zm102.214844 193.5h-512v40h512zm0 0"/></svg>
+                           <svg  class="text-gray-600 text-sm" height="24px" width="24px" viewBox="0 0 512 512"
+                                 xmlns="http://www.w3.org/2000/svg">
+                               <path d="m409.785156 278.5-153.785156 153.785156-153.785156-153.785156 28.285156-28.285156 105.5 105.5v-355.714844h40v355.714844l105.5-105.5zm102.214844 193.5h-512v40h512zm0 0"/></svg>
                        </button>
 
 
@@ -186,12 +190,33 @@
                                {{ user.role || 'Undefined' }}
                            </div>
                        </div>
-                       <div class="text-red-400">Edit</div>
+                       <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-right pr-2 ">
+                           <a target="_blank" href="https://moodle.org/login/index.php" class="flex justify-center text-gray-500 fill-current">
+                               <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    width="58.002px" height="58.002px" viewBox="0 0 58.002 58.002"
+                                    xml:space="preserve"  class="w-4 h-4 mt-1 mr-1">
+                                <g>
+	                                <polygon points="8.083,52.088 9.672,53.645 36.425,26.959 30.979,21.513 4.168,48.256 5.763,49.818 	"/>
+                                    <path d="M0.684,57.807l1.381-0.529L0.588,55.76l-0.52,1.409C-0.137,57.73,0.138,58.016,0.684,57.807z"/>
+                                    <polygon points="7.676,55.012 8.513,54.193 3.658,49.441 2.793,50.288 1.183,54.446 3.363,56.58 	"/>
+                                    <path d="M37.133,26.253l0.549,0.548c0.944-0.953,1.933-1.981,2.943-3.06l0.354,0.353l0.353,0.353l0.383,0.383L31.005,35.537
+		                            c-0.391,0.391-0.391,1.023,0,1.414l0.155,0.154c0.391,0.392,1.024,0.392,1.414,0L48.24,21.44c0.391-0.391,0.391-1.024,0-1.414
+		                            l-0.155-0.155c-0.391-0.391-1.023-0.391-1.414,0l-2.189,2.19L43.98,21.56l-0.353-0.352l-0.354-0.355
+		                            c1.592-1.77,3.194-3.612,4.737-5.449c1.476-1.757,2.895-3.505,4.191-5.174c2.583-3.321,4.686-6.323,5.8-8.431l-1.673-1.672
+		                            c-2.119,1.119-5.141,3.24-8.481,5.84c-2.356,1.834-4.869,3.909-7.339,6.041c-3.307,2.856-6.531,5.813-9.181,8.44l0.359,0.359
+		                            L37.133,26.253z"/>
+                                </g>
+                               </svg>
+
+<!--                           temprorary left site URL, for production case &#45;&#45; an API for USER editing / iframe with site should be added -->
+                           Edit</a>
+                       </div>
                    </div>
 <!--                   item end-->
                    </div>
                    <div class="flex items-center justify-between my-6">
-                       <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                       <div class="flex-col w-1/3 h-max mx-3 px-5 border-2 border-gray-100 rounded-md h-auto">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
@@ -199,6 +224,7 @@
                                    </div>
                                </div>
                            </div>
+                           <div v-for="instructor in $page.props.recents.instructors">
                            <hr class="boder-b-0 w-full"/>
                            <!--                           user-->
                            <div class="flex my-4 px-4">
@@ -207,78 +233,15 @@
                                </div>
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-700 font-semibold">
-                                       name
+                                       {{ instructor.name }}
                                    </div>
                                    <div class="text-gray-600 font-thin">
-                                       email
+                                       <span class="font-bold">{{ instructor.courses }}</span> courses
+                                       <span class="font-bold">{{ instructor.students }}</span> students
                                    </div>
                                </div>
                            </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end user -->
-                           <!--                           user-->
-                           <div class="flex my-4 px-4">
-                               <div class="w-16">
-                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       email
-                                   </div>
-                               </div>
                            </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end user -->
-                           <!--                           user-->
-                           <div class="flex my-4 px-4">
-                               <div class="w-16">
-                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       email
-                                   </div>
-                               </div>
-                           </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end user -->
-                           <!--                           user-->
-                           <div class="flex my-4 px-4">
-                               <div class="w-16">
-                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       email
-                                   </div>
-                               </div>
-                           </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end user -->
-                           <!--                           user-->
-                           <div class="flex my-4 px-4 mb-20">
-                               <div class="w-16">
-                                   <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       email
-                                   </div>
-                               </div>
-                           </div>
-                           <!--                           end user -->
                        </div>
                        <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
@@ -288,6 +251,7 @@
                                    </div>
                                </div>
                            </div>
+                           <div v-for="course in $page.props.recents.courses">
                            <hr class="boder-b-0 w-full"/>
                            <!--                           course-->
                            <div class="flex my-4 px-4">
@@ -296,63 +260,17 @@
                                </div>
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-700 font-semibold">
-                                       Course name to show here
+                                      {{ course.name }}
                                    </div>
-                                   <div class="text-gray-600 font-thin">
-                                       course author name
-                                   </div>
-                               </div>
-                           </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end course -->
-                           <!--                           course-->
-                           <div class="flex my-4 px-4">
-                               <div class="w-50">
-                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/50x50/?tech">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       Course name to show here
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       course author name
+                                   <div class="text-gray-600 font-thin flex">
+                                       <div class="w-6 mr-2">
+                                           <img class="h-6 rounded-full" src="https://source.unsplash.com/50x50/?water">
+                                       </div>
+                                       {{ course.instructor }}
                                    </div>
                                </div>
                            </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end course -->
-                           <!--                           course-->
-                           <div class="flex my-4 px-4">
-                               <div class="w-50">
-                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/50x50/?tech">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       Course name to show here
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       course author name
-                                   </div>
-                               </div>
                            </div>
-                           <hr class="boder-b-0 my-4"/>
-                           <!--                           end course -->
-                           <!--                           course-->
-                           <div class="flex my-4 px-4 mb-16">
-                               <div class="w-50">
-                                   <img class="w-40 h-16 rounded-md" src="https://source.unsplash.com/50x50/?tech">
-                               </div>
-                               <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       Course name to show here
-                                   </div>
-                                   <div class="text-gray-600 font-thin">
-                                       course author name
-                                   </div>
-                               </div>
-                           </div>
-                           <!--                           end course -->
-
                        </div>
                        <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
@@ -369,36 +287,41 @@
                                    <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
                                </div>
                                <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
+                                   <div class="text-gray-700 font-semibold text-sm">
+                                       {{   $page.props.recents.activity[0].user }}
                                    </div>
                                    <div class="text-gray-600 font-thin">
-                                       email
+                                       {{ getActivityText($page.props.recents.activity[0].type,
+                                       $page.props.recents.activity[0].course,
+                                       $page.props.recents.activity[0].score) }}
                                    </div>
                                </div>
                            </div>
-                           <div class="text-gray-600 font-thin ml-20 mt-4 absolute">
-                               time X hours ago
+                           <div class="text-gray-600 text-xs font-thin ml-20 mt-4 absolute">
+                               {{ getTimeFromNowByTs($page.props.recents.activity[0].ts) }} ago
                            </div>
+
                            <!--connector line, maybe re-style for FOREACH loop-->
-                           <div class="border-l-2 border-gray-200 h-16 absolute ml-10 pb-2 pt-5"></div>
+                           <div class="border-l-2 border-gray-200 h-20 absolute ml-10 pb-2 pt-5"></div>
                            <!--                           end user -->
                            <!--                           user-->
-                           <div class="flex mt-16 px-4">
+                           <div class="flex mt-20 px-4">
                                <div class="w-16">
                                    <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
                                </div>
                                <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
+                                   <div class="text-gray-700 font-semibold text-sm">
+                                       {{   $page.props.recents.activity[1].user }}
                                    </div>
                                    <div class="text-gray-600 font-thin">
-                                       email
+                                       {{ getActivityText($page.props.recents.activity[1].type,
+                                       $page.props.recents.activity[1].course,
+                                       $page.props.recents.activity[1].score) }}
                                    </div>
                                </div>
                            </div>
-                           <div class="text-gray-600 font-thin ml-20 mt-4 absolute">
-                               time X hours ago
+                           <div class="text-gray-600 text-xs font-thin ml-20 mt-4 absolute">
+                               {{ getTimeFromNowByTs($page.props.recents.activity[1].ts) }} ago
                            </div>
 
                            <div class="border-l-2 border-gray-200 h-16 absolute ml-10 pb-2 pt-5"></div>
@@ -409,16 +332,18 @@
                                    <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
                                </div>
                                <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
+                                   <div class="text-gray-700 font-semibold text-sm">
+                                       {{   $page.props.recents.activity[2].user }}
                                    </div>
                                    <div class="text-gray-600 font-thin">
-                                       email
+                                       {{ getActivityText($page.props.recents.activity[2].type,
+                                       $page.props.recents.activity[2].course,
+                                       $page.props.recents.activity[2].score) }}
                                    </div>
                                </div>
                            </div>
-                           <div class="text-gray-600 font-thin ml-20 mt-4 absolute">
-                               time X hours ago
+                           <div class="text-gray-600 text-xs font-thin ml-20 mt-4 absolute">
+                               {{ getTimeFromNowByTs($page.props.recents.activity[2].ts) }} ago
                            </div>
 
                            <div class="border-l-2 border-gray-200 h-16 absolute ml-10 pb-2 pt-5"></div>
@@ -429,24 +354,27 @@
                                    <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?book">
                                </div>
                                <div class="flex-1 pl-2">
-                                   <div class="text-gray-700 font-semibold">
-                                       name
+                                   <div class="text-gray-700 font-semibold text-sm">
+                                       {{   $page.props.recents.activity[3].user }}
                                    </div>
                                    <div class="text-gray-600 font-thin">
-                                       email
+                                       {{ getActivityText($page.props.recents.activity[3].type,
+                                       $page.props.recents.activity[3].course,
+                                       $page.props.recents.activity[3].score) }}
                                    </div>
                                </div>
-                               <div class="text-gray-600 font-thin ml-16 mt-20 absolute">
-                                   time X hours ago
+                               <div class="text-gray-600 text-xs font-thin ml-16 mt-20 absolute">
+                                   {{ getTimeFromNowByTs($page.props.recents.activity[3].ts) }} ago
                                </div>
                            </div>
+
                            <!--                           end user -->
                        </div>
                    </div>
 
                </div>
 
-               {{ $page.props }}
+<!--               {{ $page.props }}-->
 
 <!--               modal-->
                <div>
@@ -749,6 +677,57 @@
                         this.setEnrollments(firstChartInfo.enrollments);
                         this.setCompletions(firstChartInfo.completions);
                     });
+            },
+
+            exportAllUsers() {
+                axios
+                    .get('/dashboard/export-users')
+                    .then((response) => {
+                        const url = window.URL.createObjectURL(
+                            new Blob([response.data], { type: "text/csv" })
+                        );
+
+                        // Create dynamic <a> element
+                        const link = document.createElement("a");
+                        link.href = url;
+                        link.setAttribute("download", 'lms_users.csv');
+                        document.body.appendChild(link);
+
+                        // Dynamicall click the a link element
+                        // This will download the csv file
+                        link.click();
+                    });
+            },
+
+            getActivityText(action, course, score=0) {
+                let text = '';
+                switch (action) {
+                    case 'enroll':
+                        text = 'Just started the course ' + course;
+                        break;
+                    case 'completion':
+                        text = 'Completed the course '  + course;
+                        break;
+                    default:
+                        text = 'Just graded from the course ' + course + ' with the score of ' + Math.trunc(score);
+                }
+
+                return text;
+            },
+
+            getTimeFromNowByTs(ts){
+                // few records dont have a timestamp
+                !ts ? ts = 1542743536 : '';
+                let now = new Date()
+                let old = new Date(ts * 1000);
+
+                // displaying time in days cz most records are few years old, SHOULD BE ADJUSTED TO HOURS - MINUTES - MONTH
+                // FILTER FOR THE REAL ON-LINE ACTIVITY CASES
+
+                let timeDiff = now.getTime() - old.getTime();
+                let daysDiff = timeDiff / (1000 * 3600 * 24);
+
+                return Math.floor(daysDiff) + ' days'
             }
 
         }
