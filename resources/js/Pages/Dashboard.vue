@@ -50,13 +50,30 @@
 
                <div class="flex justify-between">
                    <div class="w-2/3 bg-white border-gray-100 border-2 rounded-md m-4">
-                       <div class="flex my-4 px-4">
+                       <div class="flex justify-between my-4 px-4">
                            <div class="flex-1 pl-2">
                                <div class="text-gray-900 font-semibold text-left">
                                    Enrollments vs Completions
                                </div>
                            </div>
+                           <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4"
+                           v-if="firstPickerOpen">
+                                   <span class="flex justify-center text-gray-500 fill-current" @click="applyDates">
+                                       Apply</span>
+                           </div>
+                           <div>
+                               <flat-pickr
+                                   v-model="pickedDateFirst"
+                                   :config="pickerConfig"
+                                   class="form-control opacity-0 absolute w-2 h-10"
+                                   @onOpen="firstPickerOpen = !firstPickerOpen"
+                                   @onClose="firstPickerOpen = !firstPickerOpen"/>
+                           <svg  class="text-gray-500 fill-current mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                               <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                           </svg>
+                           </div>
                        </div>
+
                        <hr class="boder-b-0 w-full"/>
                        <highcharts :options="firstChartOptions" class="w-full"></highcharts>
                    </div>
@@ -68,6 +85,20 @@
                                    Enrollment methods
                                </div>
                            </div>
+                           <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4"
+                           v-if="secondPickerOpen">
+                                   <span class="flex justify-center text-gray-500 fill-current" @click="applyDates">
+                                       Apply</span>
+                           </div>
+                           <flat-pickr
+                               v-model="pickedDateSecond"
+                               :config="pickerConfig"
+                               class="form-control opacity-0 absolute w-2 h-10 right-0 mr-8"
+                               @onOpen="secondPickerOpen = !secondPickerOpen"
+                               @onClose="secondPickerOpen = !secondPickerOpen"/>
+                           <svg  class="text-gray-500 fill-current mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                               <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                           </svg>
                        </div>
                        <hr class="boder-b-0 w-full"/>
                        <highcharts :options="secondChartOptions" class="w-full"></highcharts>
@@ -490,17 +521,19 @@
                    </div>
                    <div v-if="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
                </div>
-
            </div>
+
         </template>
     </breeze-authenticated-layout>
 </template>
 
 <script>
-    import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-    import TotalsCard from '@/Components/DashboardElements/TotalsCard'
-    import BreezeButton from '@/Components/Button'
-    import {Chart} from 'highcharts-vue'
+import TotalsCard from '@/Components/DashboardElements/TotalsCard'
+import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
+import flatPickr from 'vue-flatpickr-component';
+import BreezeButton from '@/Components/Button'
+import 'flatpickr/dist/flatpickr.css';
+import {Chart} from 'highcharts-vue'
 
 
     export default {
@@ -508,7 +541,8 @@
             BreezeAuthenticatedLayout,
             highcharts: Chart,
             BreezeButton,
-            TotalsCard
+            TotalsCard,
+            flatPickr
         },
 
 
@@ -528,7 +562,16 @@
                     status: "Any status",
                     course: "Any course"
                 },
+                pickerConfig: {
+                    mode: "range",
+                    dateFormat: "U",
+                    conjunction: ", "
+                },
                 search: '',
+                pickedDateFirst: null,
+                pickedDateSecond: null,
+                firstPickerOpen: false,
+                secondPickerOpen: false,
                 filter: {},
                 firstChartInfo: {},
                 usersIconViewbox: `0 0 24 24`,
@@ -827,6 +870,10 @@
                 this.secondChartOptions.series[0].data = chartData;
                 console.log('chartData', chartData);
 
+            },
+
+            applyDates(){
+                this.$refs.datePicker.fp.close();
             }
 
         }
