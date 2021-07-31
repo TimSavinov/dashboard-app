@@ -47,10 +47,35 @@
 
 
                </div>
-               <highcharts :options="firstChartOptions"></highcharts>
 
-               <div class="bg-white mx-4">
-                   <div class="border-2 rounded-md">
+               <div class="flex justify-between">
+                   <div class="w-2/3 bg-white border-gray-100 border-2 rounded-md m-4">
+                       <div class="flex my-4 px-4">
+                           <div class="flex-1 pl-2">
+                               <div class="text-gray-900 font-semibold text-left">
+                                   Enrollments vs Completions
+                               </div>
+                           </div>
+                       </div>
+                       <hr class="boder-b-0 w-full"/>
+                       <highcharts :options="firstChartOptions" class="w-full"></highcharts>
+                   </div>
+
+                   <div class="w-1/3 bg-white border-gray-100 border-2 rounded-md m-4">
+                       <div class="flex my-4 px-4">
+                           <div class="flex-1 pl-2">
+                               <div class="text-gray-900 font-semibold text-left">
+                                   Enrollment methods
+                               </div>
+                           </div>
+                       </div>
+                       <hr class="boder-b-0 w-full"/>
+                       <highcharts :options="secondChartOptions" class="w-full"></highcharts>
+                   </div>
+               </div>
+
+               <div class="mx-4">
+                   <div class="border-2 rounded-md bg-white">
                    <div class="pt-2 relative mx-auto text-gray-600">
                        <button type="submit" class="absolute top-0 mt-5 ml-4" @click="searchUsersByName">
                            <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
@@ -215,8 +240,8 @@
                    </div>
 <!--                   item end-->
                    </div>
-                   <div class="flex items-center justify-between my-6">
-                       <div class="flex-col w-1/3 h-max mx-3 px-5 border-2 border-gray-100 rounded-md h-auto">
+                   <div class="flex items-center justify-between mt-6 pb-6">
+                       <div class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
@@ -227,7 +252,7 @@
                            <div v-for="instructor in $page.props.recents.instructors">
                            <hr class="boder-b-0 w-full"/>
                            <!--                           user-->
-                           <div class="flex my-4 px-4">
+                           <div class="flex my-6 px-4">
                                <div class="w-16">
                                    <img class="w-12 h-12 rounded-full" src="https://source.unsplash.com/50x50/?nature">
                                </div>
@@ -243,7 +268,7 @@
                            </div>
                            </div>
                        </div>
-                       <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                       <div class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
@@ -272,7 +297,7 @@
                            </div>
                            </div>
                        </div>
-                       <div class="flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                       <div class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
@@ -563,8 +588,7 @@
                         },
                     },
                     title: {
-                        text: 'Enrollments vs Completions',
-                        align: 'left',
+                        text: undefined,
                     },
 
                     yAxis: {
@@ -609,6 +633,48 @@
                         }]
                     }
 
+                },
+                secondChartOptions: {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: undefined,
+                    },
+                    plotOptions: {
+                        series: {
+                            enableMouseTracking: false
+                        },
+                        pie: {
+                            allowPointSelect: false,
+                            shadow: false,
+                            colors: ['#A312F6', '#6e57f5', '#cbc2fa', '#e7e3fd'],
+                            center: ['50%', '50%'],
+                            states: {
+                                hover: {
+                                    enabled: false
+                                }
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    tooltip: {
+                        enabled: false,
+                    },
+                    series: [{
+                        name: 'Versions',
+                        colorByPoint: true,
+                        data: [{name: 'first', y: 30}, {name: 'second', y: 10}, {name: 'third', y: 50}, {name: 'fourth', y: 10}],
+                        // borderWidth:0,
+                        size: '100%',
+                        innerSize: '80%',
+
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        allowPointSelect: false,
+                        stickyTracking: false,
+                    }]
                 },
                 showModal: false
             }
@@ -688,6 +754,9 @@
                         let firstChartInfo = res.data.chart_1;
                         this.setEnrollments(firstChartInfo.enrollments);
                         this.setCompletions(firstChartInfo.completions);
+
+                        this.setSecondChart(res.data.chart_2);
+                        console.log('res', res.data.chart_2);
                     });
             },
 
@@ -705,8 +774,6 @@
                         link.setAttribute("download", 'lms_users.csv');
                         document.body.appendChild(link);
 
-                        // Dynamicall click the a link element
-                        // This will download the csv file
                         link.click();
                     });
             },
@@ -748,6 +815,18 @@
                 let daysDiff = timeDiff / (1000 * 3600 * 24);
 
                 return Math.floor(daysDiff) + ' days'
+            },
+
+            setSecondChart(data){
+                let chartData = [];
+                for (const [key, value] of Object.entries(data)) {
+                    let enrollType = {name: key, y: value };
+                    chartData.push(enrollType);
+                }
+
+                this.secondChartOptions.series[0].data = chartData;
+                console.log('chartData', chartData);
+
             }
 
         }

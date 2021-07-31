@@ -36,4 +36,12 @@ class Enroll extends Model
         return Enroll::distinct()->get('enrol');
     }
 
+    /**
+     * @return int
+     */
+    public static function getAllCount()
+    {
+        return Enroll::all()->groupBy('enrol')->map->count();
+    }
+
 }

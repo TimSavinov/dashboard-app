@@ -62,7 +62,7 @@ class DashboardController extends Controller
                 'last' => $this->user->getLastEnrollments(),
              ],
             "teachers" => [
-                'count' => $this->user->getUsersByRole('teacher')->count(),
+                'count' => $this->user->getUsersByRole('instructor'),
                 'last' => $this->user->getLastByRole('teacher'),
             ]
         ],
@@ -104,6 +104,8 @@ class DashboardController extends Controller
                 "enrollments" => Enrollment::getTimeEnrolled(),
                 "completions" => Completion::getTimeCompleted(),
             ],
+
+            'chart_2' => Enroll::getAllCount()
         ]);
     }
 

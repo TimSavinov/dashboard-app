@@ -96,7 +96,18 @@ class User extends Authenticatable
      */
     public function getUsersByRole($role)
     {
-        return Role::where('shortname', $role)->first()->users();
+
+        //to increase the overall number of teachers / instructors
+        if($role=='instructor'){
+            $instructors = Role::where('shortname', 'coursecreator')->first()->users()->count();
+            $editTeachers = Role::where('shortname', 'editingteacher')->first()->users()->count();
+            $courseCreators = Role::where('shortname', 'coursecreator')->first()->users()->count();
+
+            return $instructors + $editTeachers + $courseCreators;
+        }
+        else {
+            return Role::where('shortname', $role)->first()->users();
+        }
     }
 
     /**
