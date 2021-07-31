@@ -56,18 +56,15 @@
                                    Enrollments vs Completions
                                </div>
                            </div>
-                           <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4"
-                           v-if="firstPickerOpen">
-                                   <span class="flex justify-center text-gray-500 fill-current" @click="applyDates">
+                           <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4 cursor-pointer hover:border-blue-600 hover:shadow-md">
+                                   <span class="flex justify-center text-gray-500 fill-current" @click="applyDates(1)">
                                        Apply</span>
                            </div>
                            <div>
                                <flat-pickr
                                    v-model="pickedDateFirst"
                                    :config="pickerConfig"
-                                   class="form-control opacity-0 absolute w-2 h-10"
-                                   @onOpen="firstPickerOpen = !firstPickerOpen"
-                                   @onClose="firstPickerOpen = !firstPickerOpen"/>
+                                   class="form-control opacity-0 absolute w-2 h-10"/>
                            <svg  class="text-gray-500 fill-current mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                            </svg>
@@ -85,17 +82,14 @@
                                    Enrollment methods
                                </div>
                            </div>
-                           <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4"
-                           v-if="secondPickerOpen">
-                                   <span class="flex justify-center text-gray-500 fill-current" @click="applyDates">
+                           <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4 cursor-pointer hover:border-blue-600 hover:shadow-md">
+                                   <span class="flex justify-center text-gray-500 fill-current" @click="applyDates(2)">
                                        Apply</span>
                            </div>
                            <flat-pickr
                                v-model="pickedDateSecond"
                                :config="pickerConfig"
-                               class="form-control opacity-0 absolute w-2 h-10 right-0 mr-8"
-                               @onOpen="secondPickerOpen = !secondPickerOpen"
-                               @onClose="secondPickerOpen = !secondPickerOpen"/>
+                               class="form-control opacity-0 absolute w-2 h-10 right-0 mr-8"/>
                            <svg  class="text-gray-500 fill-current mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                            </svg>
@@ -565,7 +559,6 @@ import {Chart} from 'highcharts-vue'
                 pickerConfig: {
                     mode: "range",
                     dateFormat: "U",
-                    conjunction: ", "
                 },
                 search: '',
                 pickedDateFirst: null,
@@ -762,12 +755,31 @@ import {Chart} from 'highcharts-vue'
             applyFilters() {
                 this.toggleFilterModal();
                 this.filterUsers();
-                console.log('filters', this.filterResults);
             },
 
 
 
             // AJAX calls
+
+            filterChartByRange(range) {
+                axios
+                    .post('/dashboard/charts/filter', {'range': range})
+                    .then((res) => {
+                        let chart = res.data.chart;
+                        switch (chart.type) {
+                                case 'methods':
+                                    if(chart.data.length == 0) {alert('Nothing found in the picked range. Please select another dates')}
+                                    this.setSecondChart(chart.data);
+                                    break;
+                                case 'vs':
+                                    if(chart.data.enrollments.length == 0 && chart.data.completions.length == 0) {alert('Nothing found in the picked range. Please select another dates')}
+                                    this.setEnrollments(chart.data.enrollments);
+                                    this.setCompletions(chart.data.completions);
+                        }
+                    });
+                this.search = '';
+            },
+
             searchUsersByName() {
                 axios
                     .post('/dashboard/search', {'query': this.search})
@@ -775,8 +787,6 @@ import {Chart} from 'highcharts-vue'
                         if(res.data.users.length > 0) {
                             this.$page.props.users.init = res.data.users;
                         } else { alert('Nothing found, please try another search query')}
-
-                        console.log('ress', res.data.users.length);
                     });
                 this.search = '';
             },
@@ -785,7 +795,6 @@ import {Chart} from 'highcharts-vue'
                 axios
                     .get('/dashboard/filter')
                     .then((res) => {
-                        console.log('asdasdasd', res.data.filter_info);
                         this.filter = res.data.filter_info;
                     });
             },
@@ -799,7 +808,6 @@ import {Chart} from 'highcharts-vue'
                         this.setCompletions(firstChartInfo.completions);
 
                         this.setSecondChart(res.data.chart_2);
-                        console.log('res', res.data.chart_2);
                     });
             },
 
@@ -868,13 +876,38 @@ import {Chart} from 'highcharts-vue'
                 }
 
                 this.secondChartOptions.series[0].data = chartData;
-                console.log('chartData', chartData);
 
             },
 
-            applyDates(){
-                this.$refs.datePicker.fp.close();
-            }
+            applyDates(type) {
+                let range = {};
+                switch (type) {
+                    case 1:
+                        if(this.pickedDateFirst && this.pickedDateFirst.length > 11){
+                            let datesF = this.pickedDateFirst.split('to');
+                            range = {
+                                'type': 'vs',
+                                'start': parseInt(datesF[0]),
+                                'end': parseInt(datesF[1])
+                            }
+                            this.filterChartByRange(range);
+                            this.pickedDateFirst = null;
+                        }
+                        break;
+                    case 2:
+                        if(this.pickedDateSecond && this.pickedDateSecond.length > 11) {
+                            let datesS = this.pickedDateSecond.split('to');
+                            range = {
+                                'type': 'methods',
+                                'start': parseInt(datesS[0]),
+                                'end': parseInt(datesS[1])
+                            }
+                            this.filterChartByRange(range);
+                            this.pickedDateSecond = null;
+                        }
+                        break;
+                }
+            },
 
         }
     }

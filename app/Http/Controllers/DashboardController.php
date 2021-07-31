@@ -157,6 +157,12 @@ class DashboardController extends Controller
         return $this->user->filterUsers($data);
     }
 
+    /**
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     */
     public function searchUsers(\Illuminate\Http\Request $request) {
         $data = $request->validate([
             "query" => "required|string|min:1"
@@ -171,6 +177,35 @@ class DashboardController extends Controller
 
 
         return response()->json(["users" => $this->user->getUsersForDashboard($users)]);
+    }
+
+    public function filterChartsInfo(\Illuminate\Http\Request $request)
+    {
+        $data = $request->validate([
+            "range" => "required|array|min:2",
+            "range.start" => "required|numeric",
+            "range.end" => "required|numeric",
+            "range.type" => "required|string",
+        ]);
+
+        switch ($data['range']['type']) {
+            case 'vs':
+                $res = [
+                    "enrollments" => Enrollment::getTimeEnrolled($data['range']['start']),
+                    "completions" => Completion::getTimeCompleted($data['range']['end']),
+                ];
+                break;
+            case 'methods':
+                $res = Enroll::getAllCount($data['range']);
+        }
+
+
+        return response()->json([
+            'chart' => [
+                'type' => $data['range']['type'],
+                'data' => $res
+                ]
+            ]);
     }
 
 

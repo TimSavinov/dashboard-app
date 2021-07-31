@@ -39,9 +39,18 @@ class Enroll extends Model
     /**
      * @return int
      */
-    public static function getAllCount()
+    public static function getAllCount($range=null)
     {
-        return Enroll::all()->groupBy('enrol')->map->count();
+        if($range){
+            return Enroll::whereBetween('timecreated', [$range['start'], $range['end']])
+                ->get()
+                ->groupBy('enrol')
+                ->map->count();
+        }
+        else {
+            return Enroll::all()->groupBy('enrol')->map->count();
+
+        }
     }
 
 }

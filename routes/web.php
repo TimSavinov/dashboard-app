@@ -27,7 +27,7 @@ Route::get('/dashboard', [DashboardController::class, 'render'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/dashboard/filter', [DashboardController::class, 'getInfoForFilter'])
+Route::get('/dashboard/filter', [DashboardController::class, 'getInfoForFilter'])4
     ->middleware(['auth', 'verified']);
 
 Route::post('/dashboard/filter', [DashboardController::class, 'filterUsers'])
@@ -37,6 +37,9 @@ Route::post('/dashboard/search', [DashboardController::class, 'searchUsers'])
     ->middleware(['auth', 'verified']);
 
 Route::get('/dashboard/charts', [DashboardController::class, 'getChartsInfo'])
+    ->middleware(['auth', 'verified']);
+
+Route::post('/dashboard/charts/filter', [DashboardController::class, 'filterChartsInfo'])
     ->middleware(['auth', 'verified']);
 
 Route::get('/dashboard/export-users', [DashboardController::class, 'exportUsers'])
