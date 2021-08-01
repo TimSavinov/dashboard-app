@@ -5,7 +5,7 @@
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Dashboard
                 </h2>
-                <breeze-button>
+                <breeze-button class="bg-blue-700" @click="showSettings = !showSettings">
                     Settings
                 </breeze-button>
             </div>
@@ -515,6 +515,9 @@
                    </div>
                    <div v-if="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
                </div>
+
+<!--               settings modal-->
+               <settings v-if="showSettings" @closeSettings="showSettings = !showSettings"></settings>
            </div>
 
         </template>
@@ -524,8 +527,9 @@
 <script>
 import TotalsCard from '@/Components/DashboardElements/TotalsCard'
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-import flatPickr from 'vue-flatpickr-component';
+import flatPickr from 'vue-flatpickr-component'
 import BreezeButton from '@/Components/Button'
+import Settings from '@/Components/DashboardElements/Settings'
 import 'flatpickr/dist/flatpickr.css';
 import {Chart} from 'highcharts-vue'
 
@@ -536,7 +540,8 @@ import {Chart} from 'highcharts-vue'
             highcharts: Chart,
             BreezeButton,
             TotalsCard,
-            flatPickr
+            flatPickr,
+            Settings
         },
 
 
@@ -567,6 +572,8 @@ import {Chart} from 'highcharts-vue'
                 secondPickerOpen: false,
                 filter: {},
                 firstChartInfo: {},
+                showSettings: false,
+                showModal: false,
                 usersIconViewbox: `0 0 24 24`,
                 coursesIconViewbox: `0 0 412.72 412.72`,
                 studentsIconViewbox: `0 0 1000 1000`,
@@ -712,7 +719,6 @@ import {Chart} from 'highcharts-vue'
                         stickyTracking: false,
                     }]
                 },
-                showModal: false
             }
         },
         methods:{
