@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\DashboardController;
+use \App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,12 @@ Route::post('/dashboard/charts/filter', [DashboardController::class, 'filterChar
     ->middleware(['auth', 'verified']);
 
 Route::get('/dashboard/export-users', [DashboardController::class, 'exportUsers'])
+    ->middleware(['auth', 'verified']);
+
+Route::post('/settings/update', [SettingsController::class, 'update'])
+    ->middleware(['auth', 'verified']);
+
+Route::get('/settings', [SettingsController::class, 'list'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

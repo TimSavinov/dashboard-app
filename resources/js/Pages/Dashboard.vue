@@ -15,14 +15,22 @@
            <div>
                <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-5">
 
-                  <TotalsCard  :title="`total users`"
+                  <TotalsCard
+                            :width="settings.totals.users_total.sizes.width != '' ? settings.totals.users_total.sizes.width + 'px' : null"
+                            :height="settings.totals.users_total.sizes.height != '' ? settings.totals.users_total.sizes.height + 'px' : null"
+                            v-if="settings.totals.users_total.toggle"
+                            :title="settings.totals.users_total.title"
                             :icon_1="usersIcon"
                             :icon_1_viewbox="usersIconViewbox"
                             :amount="$page.props.totals.users.count"
                             :progress="$page.props.totals.users.last"
                             :progress-title="`Registered this week`"></TotalsCard>
 
-                   <TotalsCard :title="`courses`"
+                   <TotalsCard
+                             :width="settings.totals.courses_total.sizes.width != '' ? settings.totals.courses_total.sizes.width + 'px' : null"
+                            :height="settings.totals.courses_total.sizes.height != '' ? settings.totals.courses_total.sizes.height + 'px' : null"
+                            v-if="settings.totals.courses_total.toggle"
+                            :title="settings.totals.courses_total.title"
                             :icon_1="coursesIcon"
                             :icon_1_viewbox="coursesIconViewbox"
                             :amount="$page.props.totals.courses.count"
@@ -31,14 +39,22 @@
                             :standardProgressColor="false"
                             :progress-title="`Created this week`"></TotalsCard>
 
-                   <TotalsCard :title="`students`"
+                   <TotalsCard
+                            :width="settings.totals.students_total.sizes.width != '' ? settings.totals.students_total.sizes.width + 'px' : null"
+                             :height="settings.totals.students_total.sizes.height != '' ? settings.totals.students_total.sizes.height + 'px' : null"
+                             v-if="settings.totals.students_total.toggle"
+                            :title="settings.totals.students_total.title"
                             :icon_1="studentsIcon"
                             :icon_1_viewbox="studentsIconViewbox"
                             :amount="$page.props.totals.students.count"
                             :progress="$page.props.totals.students.last"
                             :progress-title="`Enrolled this week`"></TotalsCard>
 
-                   <TotalsCard :title="`instructor`"
+                   <TotalsCard
+                            :width="settings.totals.instructors_total.sizes.width != '' ? settings.totals.instructors_total.sizes.width + 'px' : null"
+                            :height="settings.totals.instructors_total.sizes.height != '' ? settings.totals.instructors_total.sizes.height + 'px' : null"
+                             v-if="settings.totals.instructors_total.toggle"
+                             :title="settings.totals.instructors_total.title"
                             :icon_1="instructorIcon"
                             :icon_1_viewbox="instructorIconViewbox"
                             :amount="$page.props.totals.teachers.count"
@@ -49,11 +65,15 @@
                </div>
 
                <div class="flex justify-between">
-                   <div class="w-2/3 bg-white border-gray-100 border-2 rounded-md m-4">
+                   <div
+                       v-if="settings.chart_1.toggle"
+                       class="w-2/3 bg-white border-gray-100 border-2 rounded-md m-4"
+                       :style="{ width: settings.chart_1.sizes.width != '' ? settings.chart_1.sizes.width + 'px' : null,
+                                height: settings.chart_1.sizes.height != '' ? settings.chart_1.sizes.height + 'px' : null}">
                        <div class="flex justify-between my-4 px-4">
                            <div class="flex-1 pl-2">
                                <div class="text-gray-900 font-semibold text-left">
-                                   Enrollments vs Completions
+                                  {{ settings.chart_1.title }}
                                </div>
                            </div>
                            <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4 cursor-pointer hover:border-blue-600 hover:shadow-md">
@@ -75,11 +95,15 @@
                        <highcharts :options="firstChartOptions" class="w-full"></highcharts>
                    </div>
 
-                   <div class="w-1/3 bg-white border-gray-100 border-2 rounded-md m-4">
+                   <div
+                       v-if="settings.chart_2.toggle"
+                       :style="{ width: settings.chart_2.sizes.width != '' ? settings.chart_2.sizes.width + 'px' : null,
+                                height: settings.chart_2.sizes.height != '' ? settings.chart_2.sizes.height + 'px' : null}"
+                       class="w-1/3 bg-white border-gray-100 border-2 rounded-md m-4">
                        <div class="flex my-4 px-4">
                            <div class="flex-1 pl-2">
                                <div class="text-gray-900 font-semibold text-left">
-                                   Enrollment methods
+                                   {{ settings.chart_2.title }}
                                </div>
                            </div>
                            <div class="border-2 border-gray-300 text-gray-500 rounded-md w-16 text-center pr-2 right-0 mr-4 cursor-pointer hover:border-blue-600 hover:shadow-md">
@@ -100,7 +124,11 @@
                </div>
 
                <div class="mx-4">
-                   <div class="border-2 rounded-md bg-white">
+                   <div
+                       v-if="settings.users.toggle"
+                       :style="{ width: settings.users.sizes.width != '' ? settings.users.sizes.width + 'px' : null,
+                                height: settings.users.sizes.height != '' ? settings.users.sizes.height + 'px' : null}"
+                       class="border-2 rounded-md bg-white">
                    <div class="pt-2 relative mx-auto text-gray-600">
                        <button type="submit" class="absolute top-0 mt-5 ml-4" @click="searchUsersByName">
                            <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +162,7 @@
 
 
                        <input class="focus:outline-white focus:ring-transparent border-none bg-white h-10 w-1/3 pl-10 text-sm"
-                              type="search" name="search" placeholder="Search users" v-model="search" @keyup.enter="searchUsersByName">
+                              type="search" name="search" :placeholder="settings.users.title" v-model="search" @keyup.enter="searchUsersByName">
                        <hr class="boder-b-0 ml-4 my-1 w-1/3"/>
                    </div>
 
@@ -266,11 +294,15 @@
 <!--                   item end-->
                    </div>
                    <div class="flex items-center justify-between mt-6 pb-6">
-                       <div class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                       <div
+                           v-if="settings.instructors.toggle"
+                           :style="{ width: settings.instructors.sizes.width != '' ? settings.instructors.sizes.width + 'px' : null,
+                                height: settings.instructors.sizes.height != '' ? settings.instructors.sizes.height + 'px' : null}"
+                           class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
-                                       Popular Instructor
+                                       {{ settings.instructors.title }}
                                    </div>
                                </div>
                            </div>
@@ -293,11 +325,15 @@
                            </div>
                            </div>
                        </div>
-                       <div class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                       <div
+                           v-if="settings.courses.toggle"
+                           :style="{ width: settings.courses.sizes.width != '' ? settings.courses.sizes.width + 'px' : null,
+                                height: settings.courses.sizes.height != '' ? settings.courses.sizes.height + 'px' : null}"
+                           class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
-                                       Recent courses
+                                       {{ settings.courses.title }}
                                    </div>
                                </div>
                            </div>
@@ -322,11 +358,15 @@
                            </div>
                            </div>
                        </div>
-                       <div class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
+                       <div
+                           v-if="settings.activities.toggle"
+                           :style="{ width: settings.activities.sizes.width != '' ? settings.activities.sizes.width + 'px' : null,
+                                height: settings.activities.sizes.height != '' ? settings.activities.sizes.height + 'px' : null}"
+                           class="bg-white flex-col w-1/3 mx-3 px-5 border-2 border-gray-100 rounded-md">
                            <div class="flex my-4 px-4">
                                <div class="flex-1 pl-2">
                                    <div class="text-gray-900 font-semibold text-left">
-                                       Activity
+                                       {{ settings.activities.title }}
                                    </div>
                                </div>
                            </div>
@@ -517,7 +557,9 @@
                </div>
 
 <!--               settings modal-->
-               <settings v-if="showSettings" @closeSettings="showSettings = !showSettings"></settings>
+               <settings v-if="showSettings"
+                         @closeSettings="showSettings = !showSettings"
+                         @settingsChanged="getSettings"></settings>
            </div>
 
         </template>
@@ -546,12 +588,97 @@ import {Chart} from 'highcharts-vue'
 
 
         created(){
+            this.getSettings();
             this.getFilterInfo();
             this.getEnrollmentsAndCompletions();
         },
 
         data() {
             return {
+                settings: {
+                    totals: {
+                        users_total: {
+                            sizes: {
+                                height: '',
+                                width: '',
+                            },
+                            title: 'Users',
+                            toggle: true,
+                        },
+                        courses_total: {
+                            sizes: {
+                                height: '',
+                                width: '',
+                            },
+                            title: 'Courses',
+                            toggle: true,
+                        },
+                        students_total: {
+                            sizes: {
+                                height: '',
+                                width: '',
+                            },
+                            title: 'Students',
+                            toggle: true,
+                        },
+                        instructors_total: {
+                            sizes: {
+                                height: '',
+                                width: '',
+                            },
+                            title: 'Instructors',
+                            toggle: true,
+                        },
+                    },
+                    chart_1: {
+                        sizes: {
+                            height: '',
+                            width: '',
+                        },
+                        title: 'Enrollments VS Completions',
+                        toggle: true,
+                    },
+                    chart_2: {
+                        sizes: {
+                            height: '',
+                            width: '',
+                        },
+                        title: 'Enrollment methods',
+                        toggle: true,
+                    },
+                    users: {
+                        sizes: {
+                            height: '',
+                            width: '',
+                        },
+                        title: 'Search users',
+                        toggle: true,
+                    },
+                    instructors: {
+                        sizes: {
+                            height: '',
+                            width: '',
+                        },
+                        title: 'Popular Instructor',
+                        toggle: true,
+                    },
+                    courses: {
+                        sizes: {
+                            height: '',
+                            width: '',
+                        },
+                        title: 'Recent Courses',
+                        toggle: true,
+                    },
+                    activities: {
+                        sizes: {
+                            height: '',
+                            width: '',
+                        },
+                        title: 'Activity',
+                        toggle: true,
+                    }
+                },
                 filterResults: {
                     role: {
                         all: true,
@@ -767,6 +894,30 @@ import {Chart} from 'highcharts-vue'
 
             // AJAX calls
 
+            loadSettings() {
+                axios
+                    .get('/settings')
+                    .then((res) => {
+                        if('res', res.data.settings.length > 0) {
+                            // CHECK LENGTH TO COVER THE FIRST LOAD
+                            let settings = res.data.settings;
+                            let setObject = {'totals': {}};
+                            settings.forEach(function (set) {
+                                let key = Object.keys(set);
+                                if (key == 'users_total' || key == 'students_total' || key == 'courses_total' || key == 'instructors_total') {
+                                    setObject['totals'][key] = set[key];
+                                } else {
+                                    setObject[key] = set[key];
+                                }
+                            });
+
+                            this.settings = JSON.parse(JSON.stringify(setObject));
+                        }
+                        console.log('on_load', this.settings);
+
+                    });
+            },
+
             filterChartByRange(range) {
                 axios
                     .post('/dashboard/charts/filter', {'range': range})
@@ -914,6 +1065,16 @@ import {Chart} from 'highcharts-vue'
                         break;
                 }
             },
+
+            getSettings(data=null) {
+                if(data){
+                    this.settings = data.settings;
+                    console.log('set', this.settings.totals);
+                }
+                else {
+                    this.loadSettings();
+                }
+            }
 
         }
     }

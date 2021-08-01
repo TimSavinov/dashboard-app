@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white rounded-md">
+    <div class="bg-white rounded-md" :style="{'width': width, 'height': height, 'min-height': minHeight, 'min-width': minWidth}">
         <div class="py-2">
             <div class="flex justify-between px-4">
                 <div class="text-gray-600 uppercase text-sm font-bold">{{ title }}</div>
@@ -24,6 +24,8 @@
 export default {
     props: {
         title: String,
+        width: Number,
+        height: Number,
         icon_1: String,
         icon_1_viewbox: String,
         amount: Number,
@@ -37,6 +39,12 @@ export default {
             type: Boolean,
             default: true,
         },
+    },
+    data() {
+        return {
+            minWidth: '130px',
+            minHeight: '120px',
+        }
     }
 }
 </script>
