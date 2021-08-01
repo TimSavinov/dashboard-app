@@ -595,6 +595,10 @@ import {Chart} from 'highcharts-vue'
 
         data() {
             return {
+                usersByRole: [],
+                usersByEnrol: [],
+                usersByStatus: [],
+                usersByCourse: [],
                 settings: {
                     totals: {
                         users_total: {
@@ -887,12 +891,20 @@ import {Chart} from 'highcharts-vue'
 
             applyFilters() {
                 this.toggleFilterModal();
-                this.filterUsers();
+                this.getUsersForFilter();
             },
 
 
 
             // AJAX calls
+
+            getUsersForFilter() {
+                axios
+                    .get('/dashboard/filter-users')
+                    .then((res) => {
+                        this.filterUsers(res.data.users.init);
+                    });
+            },
 
             loadSettings() {
                 axios
@@ -986,12 +998,83 @@ import {Chart} from 'highcharts-vue'
                     });
             },
 
-            filterUsers() {
-                axios
-                .post('/dashboard/filter', this.filterResults)
-                    .then((res) => {
-                        console.log(res.data)
-                    });
+            filterUsers(u) {
+                let users = u;
+                let results =  Object.entries(this.filterResults);
+
+                for(const [filter, value] of results){
+                    switch (filter) {
+                        case 'role':
+                            let self = this;
+                            if (value["students"]) {
+
+                                console.log('role +');
+
+                                self.usersByRole = [];
+                                users.find(function (user) {
+                                    if (user.role == 'student')
+                                        self.usersByRole.push(user);
+                                });
+                            }
+                            else self.usersByRole = users;
+                        case 'enroll':
+
+                            if (this.filterResults['enroll'] != 'Any') {
+
+                                console.log('enroll +', self.filterResults['enroll']);
+
+                                self.usersByEnrol = [];
+                                self.usersByRole.find(function (user) {
+                                    if (user.enroll_type == self.filterResults['enroll'])
+                                        self.usersByEnrol.push(user);
+                                });
+                            }
+                            else self.usersByEnrol = self.usersByRole;
+
+
+                        case 'status':
+                            if (this.filterResults['status'] != 'Any status') {
+
+                                console.log('status +');
+
+                                self.usersByStatus = [];
+                                self.usersByEnrol.find(function (user) {
+                                    if (user.status == self.filterResults['status'])
+                                        self.usersByStatus.push(user);
+                                });
+                            }
+                            else self.usersByStatus = self.usersByEnrol;
+
+
+                        case 'course':
+                            if (this.filterResults['course'] != 'Any course') {
+
+                                console.log('course +');
+
+                                self.usersByCourse = [];
+                                self.usersByStatus.find(function (user) {
+                                    if (user.course == self.filterResults['course'])
+                                        self.usersByCourse.push(user);
+                                });
+                            }
+                            else self.usersByCourse = self.usersByStatus;
+                    }
+                    break;
+                }
+
+                console.log('last', this.usersByCourse);
+                if(this.usersByCourse.length === 0) {
+                    alert('Nothing found by your query, please try another filtering options');
+                } else {
+                    this.$page.props.users.init = this.usersByCourse;
+                }
+
+                this.usersByRole = [];
+                this.usersByCourse = [];
+                this.usersByStatus = [];
+                this.usersByEnrole = [];
+
+                // CLEAR ALL ARRAYS
             },
 
             getActivityText(action, course, score=0) {

@@ -24,8 +24,8 @@
 export default {
     props: {
         title: String,
-        width: Number,
-        height: Number,
+        width: String,
+        height: String,
         icon_1: String,
         icon_1_viewbox: String,
         amount: Number,

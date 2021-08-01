@@ -20,6 +20,8 @@ class User extends Authenticatable
      */
     protected $table = 'mdl_user';
 
+    private $filtered;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -160,13 +162,6 @@ class User extends Authenticatable
                         ->first() : null
             ];
         });
-    }
-
-    public function filterUsers ($filters)
-    {
-
-        dd($filters);
-
     }
 
     /**

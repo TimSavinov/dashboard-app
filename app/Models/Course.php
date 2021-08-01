@@ -31,6 +31,7 @@ class Course extends Model
         return Course::count();
     }
 
+
     /**
      * @return mixed
      */

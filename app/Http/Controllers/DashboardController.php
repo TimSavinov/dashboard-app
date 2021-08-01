@@ -143,20 +143,6 @@ class DashboardController extends Controller
             return Response::stream($callback, 200, $responseHeaders);
     }
 
-    public function filterUsers(\Illuminate\Http\Request $request)
-    {
-        $data = $request->validate([
-            "role" => "required|array|min:2",
-            "name.*" => "required|string",
-            "enroll" => "required|string|min:2",
-            "status" => "required|string|min:2",
-            "course" => "required|string|min:2",
-
-        ]);
-
-        return $this->user->filterUsers($data);
-    }
-
     /**
      *
      * @param \Illuminate\Http\Request $request
@@ -206,6 +192,15 @@ class DashboardController extends Controller
                 'data' => $res
                 ]
             ]);
+    }
+
+    public function getUsersForFilter()
+    {
+        return ["users" => [
+            'init' => $this->user->getUsersForDashboard()
+        ]
+        ];
+
     }
 
 

@@ -31,7 +31,7 @@ Route::get('/dashboard', [DashboardController::class, 'render'])
 Route::get('/dashboard/filter', [DashboardController::class, 'getInfoForFilter'])
     ->middleware(['auth', 'verified']);
 
-Route::post('/dashboard/filter', [DashboardController::class, 'filterUsers'])
+Route::get('/dashboard/filter-users', [DashboardController::class, 'getUsersForFilter'])
     ->middleware(['auth', 'verified']);
 
 Route::post('/dashboard/search', [DashboardController::class, 'searchUsers'])
