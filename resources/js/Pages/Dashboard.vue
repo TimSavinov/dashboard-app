@@ -925,7 +925,6 @@ import {Chart} from 'highcharts-vue'
 
                             this.settings = JSON.parse(JSON.stringify(setObject));
                         }
-                        console.log('on_load', this.settings);
 
                     });
             },
@@ -1008,7 +1007,6 @@ import {Chart} from 'highcharts-vue'
                             let self = this;
                             if (value["students"]) {
 
-                                console.log('role +');
 
                                 self.usersByRole = [];
                                 users.find(function (user) {
@@ -1021,7 +1019,6 @@ import {Chart} from 'highcharts-vue'
 
                             if (this.filterResults['enroll'] != 'Any') {
 
-                                console.log('enroll +', self.filterResults['enroll']);
 
                                 self.usersByEnrol = [];
                                 self.usersByRole.find(function (user) {
@@ -1035,7 +1032,6 @@ import {Chart} from 'highcharts-vue'
                         case 'status':
                             if (this.filterResults['status'] != 'Any status') {
 
-                                console.log('status +');
 
                                 self.usersByStatus = [];
                                 self.usersByEnrol.find(function (user) {
@@ -1049,7 +1045,6 @@ import {Chart} from 'highcharts-vue'
                         case 'course':
                             if (this.filterResults['course'] != 'Any course') {
 
-                                console.log('course +');
 
                                 self.usersByCourse = [];
                                 self.usersByStatus.find(function (user) {
@@ -1062,7 +1057,6 @@ import {Chart} from 'highcharts-vue'
                     break;
                 }
 
-                console.log('last', this.usersByCourse);
                 if(this.usersByCourse.length === 0) {
                     alert('Nothing found by your query, please try another filtering options');
                 } else {
@@ -1152,7 +1146,6 @@ import {Chart} from 'highcharts-vue'
             getSettings(data=null) {
                 if(data){
                     this.settings = data.settings;
-                    console.log('set', this.settings.totals);
                 }
                 else {
                     this.loadSettings();
