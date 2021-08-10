@@ -16,10 +16,10 @@
 
 ## Quick start
 
-0. Make sure you have both apache and mysql server up and configured for the app directory
+0. Make sure you have both **apache** and **mysql** server up and configured for the app directory
 1. Clone git repository from git@github.com:TimSavinov/dashboard-app.git
-2. Create DB based on the dump file [moodle.sql]
-3. Create .env file  using `cp .env.example .env` 
+2. Create new DB based on the dump from this link: [ https://drive.google.com/file/d/1O8DpEP3fR6_iA1Gax_fKkJ3Pkn69SlDn/view?usp=sharing ]
+3. Create .env file  using `cp .env.example .env`
 4. Add DB information to .env (DB name, user, password e.t.c.)
 5. Install dependencies by running `composer install`
 6. Generate application key by `php artisan key:generate`
